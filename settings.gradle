@@ -1,0 +1,2 @@
+rootProject.name='UserWeb'
+include ':app'
