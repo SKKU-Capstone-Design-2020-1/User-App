@@ -1,8 +1,10 @@
-package com.skku.userweb;
+package com.skku.userweb.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
         import android.os.Bundle;
+
+import com.skku.userweb.R;
 
 public class MainActivity extends AppCompatActivity {
 
