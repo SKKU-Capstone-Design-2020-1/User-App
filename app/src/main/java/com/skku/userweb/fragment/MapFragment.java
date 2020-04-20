@@ -11,23 +11,14 @@ import androidx.fragment.app.Fragment;
 
 import com.skku.userweb.R;
 
-public class TestFragment extends Fragment {
-    public TestFragment(){
-
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        /*if (getArguments() != null){
-
-        }*/
+public class MapFragment extends Fragment {
+    public MapFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_test, container, false);
+        return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
     @Override
