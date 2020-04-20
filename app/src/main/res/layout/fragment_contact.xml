@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.ContactFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
         android:id="@+id/fragment_contact_temp_txt"
@@ -17,4 +16,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
-</>
+</androidx.constraintlayout.widget.ConstraintLayout>
