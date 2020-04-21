@@ -1,19 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
 
     <TextView
-        android:id="@+id/fragment_contact_temp_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Contact Fragment"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:text="문의하기"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30dp"
+
         />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="문의제목"
+            android:layout_marginLeft="20dp"
+            android:textColor="#050505"
+            />
+
+        <EditText
+            android:id="@+id/fagment_contact_category"
+            android:layout_width="267dp"
+            android:layout_height="53dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="100dp"
+
+            android:background="@drawable/activity_login_id"
+
+            android:textColorHint="#686E73"
+            android:textStyle="normal" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="아이디 "
+            android:layout_marginLeft="20dp"
+            android:textColor="#050505"
+            />
+
+        <EditText
+            android:id="@+id/fagment_contact_id"
+            android:layout_width="267dp"
+            android:layout_height="53dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="100dp"
+            android:background="@drawable/activity_login_id"
+            android:hint="  ID (E-mail)"
+            android:textColorHint="#686E73"
+            android:textStyle="normal" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="283dp"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="문의 내용 "
+            android:textColor="#050505"
+
+            />
+
+        <EditText
+            android:id="@+id/fagment_contact_inquire"
+            android:layout_width="266dp"
+            android:layout_height="325dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="100dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/activity_login_id"
+
+            android:textStyle="normal" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="117dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="250dp"
+        android:background="@drawable/fragment_contact_inquire"
+        android:text="문의접수"
+        android:textColor="#FFFFFF" />
+
+
+</LinearLayout>
