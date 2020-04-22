@@ -39,11 +39,11 @@
             android:layout_height="53dp"
             android:layout_gravity="center"
             android:layout_marginLeft="100dp"
-
             android:background="@drawable/activity_login_id"
-
             android:textColorHint="#686E73"
-            android:textStyle="normal" />
+
+            android:textStyle="normal"
+             />
 
     </RelativeLayout>
 

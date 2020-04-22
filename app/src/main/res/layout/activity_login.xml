@@ -65,7 +65,7 @@
 
         <EditText
             android:id="@+id/activity_login_ID"
-            android:layout_width="267dp"
+            android:layout_width="344dp"
             android:layout_height="53dp"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
@@ -77,23 +77,23 @@
 
         <EditText
             android:id="@+id/activity_login_Password"
-            android:layout_width="267dp"
+            android:layout_width="344dp"
             android:layout_height="53dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/activity_login_password"
-            android:hint="  Password"
-            android:textColorHint="#686E73"
-            android:textStyle="normal"
             android:ems="10"
-            android:inputType="textPassword" />
+            android:hint="  Password"
+            android:inputType="textPassword"
+            android:textColorHint="#686E73"
+            android:textStyle="normal" />
 
         <Button
             android:id="@+id/activity_login_Login"
             android:layout_width="251dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/activity_login_login"
             android:text="Login"
