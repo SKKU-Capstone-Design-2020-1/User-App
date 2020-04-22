@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(getApplicationContext(),MainActivity.class );
-                startActivityForResult(intent, 100);
+                startActivity(intent);
             }
         });
 
@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent= new Intent(getApplicationContext(), MainActivity.class); //register activity로 바꿔야 함
-                startActivityForResult(intent, 101);
+                startActivity(intent);
             }
         });
     }
