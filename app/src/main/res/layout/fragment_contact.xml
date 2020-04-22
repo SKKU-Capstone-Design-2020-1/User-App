@@ -39,7 +39,7 @@
             android:layout_height="53dp"
             android:layout_gravity="center"
             android:layout_marginLeft="100dp"
-            android:background="@drawable/activity_login_id"
+            android:background="@drawable/primary_outlined_edittext"
             android:textColorHint="#686E73"
 
             android:textStyle="normal"
@@ -65,8 +65,11 @@
             android:layout_height="53dp"
             android:layout_gravity="center"
             android:layout_marginLeft="100dp"
-            android:background="@drawable/activity_login_id"
+            android:background="@drawable/primary_outlined_edittext"
             android:hint="  ID (E-mail)"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textSize="15dp"
             android:textColorHint="#686E73"
             android:textStyle="normal" />
 
@@ -94,7 +97,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="100dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/activity_login_id"
+            android:background="@drawable/primary_outlined_edittext"
 
             android:textStyle="normal" />
     </RelativeLayout>
@@ -105,7 +108,7 @@
         android:layout_height="36dp"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="250dp"
-        android:background="@drawable/fragment_contact_inquire"
+        android:background="@drawable/primary_rounded_botton"
         android:text="문의접수"
         android:textColor="#FFFFFF" />
 

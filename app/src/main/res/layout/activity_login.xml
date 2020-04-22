@@ -8,6 +8,14 @@
     android:background="#FFFFFF"
     tools:context=".activity.LoginActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/activity_splash"
+        android:alpha="0.6"
+        android:scaleType="fitXY"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,16 +23,19 @@
         android:layout_marginLeft="100dp"
         android:layout_marginRight="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="35dp"
         >
 
         <TextView
             android:id="@+id/activity_login_Textview1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:gravity="center"
+            android:layout_marginLeft="16dp"
             android:text="계정이 없으신가요?"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="#000000"
+            android:textSize="15dp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/activity_login_register"
@@ -32,7 +43,9 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:text="회원가입"
-            android:textColor="@color/colorPrimary"/>
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="15dp"/>
 
     </LinearLayout>
 
@@ -50,7 +63,7 @@
             android:gravity="center"
             android:text="RSR"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
-            android:textColor="@color/colorPrimary"
+            android:textColor="#000000"
              />
 
         <TextView
@@ -61,7 +74,7 @@
             android:gravity="center"
             android:text="Realtime seat reservation"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="#000000" />
 
         <EditText
             android:id="@+id/activity_login_ID"
@@ -69,8 +82,11 @@
             android:layout_height="53dp"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
-            android:background="@drawable/activity_login_id"
+            android:background="@drawable/primary_outlined_edittext"
             android:hint="  ID (E-mail)"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textSize="15dp"
             android:textColorHint="#686E73"
             android:textStyle="normal" />
 
@@ -81,9 +97,12 @@
             android:layout_height="53dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="@drawable/activity_login_password"
+            android:background="@drawable/primary_outlined_edittext"
             android:ems="10"
             android:hint="  Password"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textSize="15dp"
             android:inputType="textPassword"
             android:textColorHint="#686E73"
             android:textStyle="normal" />
@@ -95,9 +114,12 @@
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/activity_login_login"
+            android:background="@drawable/primary_rounded_botton"
             android:text="Login"
+            android:textSize="18dp"
             android:textColor="#FFFFFF"/>
+
+
 
 
     </LinearLayout>
