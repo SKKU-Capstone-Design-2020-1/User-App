@@ -1,21 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.UserFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:id="@+id/fragment_user_profileImage"
+        android:layout_width="411dp"
+        android:layout_height="221dp"
+        android:src="@drawable/suwon_skku"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/fragment_user_temp_txt"
+        android:id="@+id/fragment_user_storename"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:text="수원_성균관대학교 도서관"
+        android:textColor="#000000"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_profileImage" />
+
+    <ImageView
+        android:id="@+id/fragment_user_emailImage"
+        android:layout_width="42dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/mail"
+        app:layout_constraintEnd_toStartOf="@+id/fragment_user_email"
+        app:layout_constraintHorizontal_bias="0.96"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_storename" />
+
+    <TextView
+        android:id="@+id/fragment_user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="user fragment"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="92dp"
+        android:text="didodido@skku.edu"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_storename" />
+
+    <View
+        android:id="@+id/fragment_user_topDivider"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_email" />
+
+    <View
+        android:id="@+id/fragment_user_bottomDivider"
+        android:layout_width="409dp"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_middleDivider" />
+
+    <View
+        android:id="@+id/fragment_user_middleDivider"
+        android:layout_width="1dp"
+        android:layout_height="70dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_user_topDivider" />
+
+    <TextView
+        android:id="@+id/fragment_user_totalseat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="total seat"
+        app:layout_constraintEnd_toStartOf="@+id/fragment_user_num_totalSeat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_topDivider"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_user_bottomDivider"/>
+
+    <TextView
+        android:id="@+id/fragment_user_dailyUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="daily users"
+
+        app:layout_constraintEnd_toStartOf="@+id/fragment_user_num_dailyUsers"
+        app:layout_constraintStart_toEndOf="@+id/fragment_user_middleDivider"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_topDivider"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_user_bottomDivider"/>
+
+    <TextView
+        android:id="@+id/fragment_user_num_totalSeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="27"
+        android:textColor="#000000"
+        android:textSize="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_topDivider"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_user_bottomDivider"
+        app:layout_constraintEnd_toStartOf="@+id/fragment_user_middleDivider"
+        app:layout_constraintStart_toEndOf="@+id/fragment_user_totalseat"
+         />
+
+    <TextView
+        android:id="@+id/fragment_user_num_dailyUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="155"
+        android:textColor="#000000"
+        android:textSize="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_topDivider"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_user_bottomDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fragment_user_dailyUsers"  />
+
+    <Button
+        android:id="@+id/fragment_user_editButton"
+        android:layout_width="291dp"
+        android:layout_height="72dp"
+        android:background="@drawable/primary_rounded_botton"
+        android:text="Edit user information"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_user_logoutButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_bottomDivider"
+         />
+
+    <Button
+        android:id="@+id/fragment_user_logoutButton"
+        android:layout_width="285dp"
+        android:layout_height="73dp"
+        android:background="@drawable/accent_rounded_botton"
+        android:text="Logout"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_editButton"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--    android:background="?attr/colorPrimary"-->
