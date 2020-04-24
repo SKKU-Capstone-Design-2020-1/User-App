@@ -8,11 +8,11 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/activity_EditUser_toolbar"
-        android:paddingLeft="0dp"
-        android:paddingRight="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,14 +21,14 @@
 
     <TextView
         android:id="@+id/activity_EditUser_RSR"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_width="105dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="40dp"
         android:text="RSR"
         android:textColor="#000000"
-        android:textSize="40dp"
+        android:textSize="53dp"
         app:layout_constraintEnd_toStartOf="@+id/activity_EditUser_RSR_full"
-        app:layout_constraintHorizontal_bias="0.831"
+        app:layout_constraintHorizontal_bias="0.818"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_toolbar" />
 
