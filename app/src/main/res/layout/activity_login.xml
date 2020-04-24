@@ -53,7 +53,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
         <TextView
             android:id="@+id/activity_login_Textview2"
             android:layout_width="246dp"
@@ -62,9 +61,11 @@
             android:layout_marginTop="150dp"
             android:gravity="center"
             android:text="RSR"
+            android:textSize="@dimen/default_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Display3"
             android:textColor="#000000"
              />
+
 
         <TextView
             android:id="@+id/activity_login_Textview3"
@@ -72,6 +73,7 @@
             android:layout_height="58dp"
             android:layout_gravity="center"
             android:gravity="center"
+            android:textSize="@dimen/default_font_normal"
             android:text="Realtime seat reservation"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#000000" />
@@ -100,11 +102,11 @@
             android:background="@drawable/primary_outlined_edittext"
             android:ems="10"
             android:hint="  Password"
+            android:inputType="textPassword"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
-            android:textSize="15dp"
-            android:inputType="textPassword"
             android:textColorHint="#686E73"
+            android:textSize="@dimen/default_font_normal"
             android:textStyle="normal" />
 
         <Button
