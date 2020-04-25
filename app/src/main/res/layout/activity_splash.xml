@@ -13,19 +13,27 @@
         app:srcCompat="@drawable/activity_splash"
         android:scaleType="fitXY"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+        />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        app:srcCompat="?android:attr/scrollbarThumbHorizontal" />
 
     <TextView
         android:id="@+id/activity_splash_textView"
         android:layout_width="255dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="410dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="150dp"
         android:gravity="center|center_vertical"
         android:padding="5dp"
         android:text="RSR"
-        android:textColor="#2962ff"
-        android:textSize="40sp" />
+        android:textColor="#F9FBFF"
+        android:textSize="@dimen/default_title" />
 
 
 </RelativeLayout>
