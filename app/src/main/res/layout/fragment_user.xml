@@ -126,32 +126,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/fragment_user_dailyUsers"  />
 
-    <Button
-        android:id="@+id/fragment_user_editButton"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:background="@drawable/primary_rounded_botton"
-        android:text="Edit user information"
-        android:textColor="#FFFFFF"
-        android:textSize="@dimen/default_font_normal"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_user_logoutButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_user_bottomDivider"
-         />
+<!--    <Button-->
+<!--        android:id="@+id/fragment_user_editButton"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:background="@drawable/primary_rounded_botton"-->
+<!--        android:text="Edit user information"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="@dimen/default_font_normal"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/fragment_user_logoutButton"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/fragment_user_bottomDivider"-->
+<!--         />-->
 
-    <Button
-        android:id="@+id/fragment_user_logoutButton"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:background="@drawable/primary_outlined_rounded_botton"
-        android:text="Logout"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/default_font_normal"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_user_editButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/fragment_user_logoutButton"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:background="@drawable/primary_outlined_rounded_botton"-->
+<!--        android:text="Logout"-->
+<!--        android:textColor="@color/colorPrimary"-->
+<!--        android:textSize="@dimen/default_font_normal"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/fragment_user_editButton"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
