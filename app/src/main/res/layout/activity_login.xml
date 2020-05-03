@@ -86,10 +86,8 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/primary_outlined_edittext"
             android:hint="  ID (E-mail)"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="5dp"
-            android:textSize="15dp"
+            android:paddingLeft="@dimen/default_padding"
+            android:textSize="@dimen/default_font_normal"
             android:textColorHint="#686E73"
             android:textStyle="normal" />
 
@@ -101,12 +99,9 @@
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/primary_outlined_edittext"
-            android:ems="10"
             android:hint="  Password"
             android:inputType="textPassword"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
-            android:paddingLeft="5dp"
+            android:paddingLeft="@dimen/default_padding"
             android:textColorHint="#686E73"
             android:textSize="@dimen/default_font_normal"
             android:textStyle="normal" />
@@ -120,10 +115,8 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/primary_rounded_botton"
             android:text="Login"
-            android:textSize="18dp"
+            android:textSize="@dimen/default_font_normal"
             android:textColor="#FFFFFF"/>
-
-
 
 
     </LinearLayout>
