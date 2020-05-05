@@ -61,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.action_search:
-                return true;
             case R.id.action_account:
                 Intent intent= new Intent(getApplicationContext(), EditUserActivity.class);
                 startActivity(intent);
