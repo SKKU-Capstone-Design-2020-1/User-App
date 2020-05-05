@@ -12,7 +12,6 @@
         android:layout_height="221dp"
         android:src="@drawable/suwon_skku"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,27 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_user_profileImage" />
 
-    <ImageView
-        android:id="@+id/fragment_user_emailImage"
-        android:layout_width="42dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/mail"
-        app:layout_constraintEnd_toStartOf="@+id/fragment_user_email"
-        app:layout_constraintHorizontal_bias="0.96"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_user_storename" />
 
-    <TextView
-        android:id="@+id/fragment_user_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="92dp"
-        android:text="didodido@skku.edu"
-        android:textSize="@dimen/default_font_normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_user_storename" />
 
     <View
         android:id="@+id/fragment_user_topDivider"
@@ -59,7 +38,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_user_email" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_storemail" />
 
     <View
         android:id="@+id/fragment_user_bottomDivider"
@@ -126,7 +105,39 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/fragment_user_dailyUsers"  />
 
-<!--    <Button-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_user_storemail"
+        android:layout_width="wrap_content"
+        android:layout_height="37dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_user_storename">
+
+        <ImageView
+            android:id="@+id/fragment_user_emailImage"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/mail"
+            app:layout_constraintTop_toTopOf="@+id/fragment_user_storemail"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_user_storemail"
+            app:layout_constraintStart_toStartOf="@+id/fragment_user_storemail" />
+
+        <TextView
+            android:id="@+id/fragment_user_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="didodido@skku.edu"
+            android:textSize="@dimen/default_font_normal"
+            app:layout_constraintTop_toTopOf="@+id/fragment_user_storemail"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_user_storemail"
+            app:layout_constraintStart_toEndOf="@+id/fragment_user_emailImage"
+            app:layout_constraintEnd_toEndOf="@+id/fragment_user_storemail" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    <Button-->
 <!--        android:id="@+id/fragment_user_editButton"-->
 <!--        android:layout_width="300dp"-->
 <!--        android:layout_height="50dp"-->
