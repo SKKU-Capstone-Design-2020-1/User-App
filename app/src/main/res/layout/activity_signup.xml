@@ -9,88 +9,90 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/activity_Signup_constraintLayout1"
-        android:layout_width="481dp"
-        android:layout_height="474dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="476dp"
+        android:layout_height="489dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
             android:id="@+id/activity_Signup_Email"
-            android:layout_width="344dp"
-            android:layout_height="53dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="60dp"
-            android:background="@drawable/primary_outlined_edittext"
-            android:hint="  ID (E-mail)"
-            android:inputType="textEmailAddress"
-            android:paddingLeft="@dimen/default_padding"
-            android:textColorHint="#686E73"
-            android:textSize="@dimen/default_font_normal"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/activity_Signup_Phone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.277"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.327" />
-
-        <EditText
-            android:id="@+id/activity_Signup_Phone"
-            android:layout_width="344dp"
-            android:layout_height="53dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
-            android:background="@drawable/primary_outlined_edittext"
-            android:hint="  Phone Number"
-            android:inputType="phone"
-            android:paddingLeft="@dimen/default_padding"
-            android:textColorHint="#686E73"
-            android:textSize="@dimen/default_font_normal"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/activity_Signup_Username"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.277"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <EditText
-            android:id="@+id/activity_Signup_Username"
-            android:layout_width="344dp"
-            android:layout_height="53dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="40dp"
-            android:background="@drawable/primary_outlined_edittext"
-            android:hint="  Username"
-            android:paddingLeft="@dimen/default_padding"
-            android:textColorHint="#686E73"
-            android:textSize="@dimen/default_font_normal"
-            android:textStyle="normal"
+            android:layout_width="269dp"
+            android:layout_height="51dp"
+            android:layout_marginTop="44dp"
+            android:ems="10"
+            android:hint="ID (Email)"
+            android:inputType="textPersonName"
             app:layout_constraintBottom_toTopOf="@+id/activity_Signup_Password"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.277"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.227"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <EditText
             android:id="@+id/activity_Signup_Password"
-            android:layout_width="344dp"
-            android:layout_height="53dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="60dp"
-            android:background="@drawable/primary_outlined_edittext"
-            android:hint="  Password"
+            android:layout_width="270dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginBottom="28dp"
+            android:ems="10"
+            android:hint="Password"
             android:inputType="textPassword"
-            android:paddingLeft="@dimen/default_padding"
-            android:textColorHint="#686E73"
-            android:textSize="@dimen/default_font_normal"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.277"
+            app:layout_constraintBottom_toTopOf="@+id/activity_Signup_Confirm_Password"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/activity_Signup_Confirm_Password"
+            android:layout_width="271dp"
+            android:layout_height="58dp"
+            android:layout_marginStart="44dp"
+            android:ems="10"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            app:layout_constraintBottom_toTopOf="@+id/activity_Signup_Username"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.877" />
+
+        <EditText
+            android:id="@+id/activity_Signup_Username"
+            android:layout_width="271dp"
+            android:layout_height="58dp"
+            android:layout_marginStart="44dp"
+            android:ems="10"
+            android:hint="Username"
+            android:inputType="textPersonName"
+            android:textColor="@color/cardview_dark_background"
+            app:layout_constraintBottom_toTopOf="@+id/activity_Signup_Phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.904" />
+
+        <EditText
+            android:id="@+id/activity_Signup_Phone"
+            android:layout_width="271dp"
+            android:layout_height="57dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginBottom="28dp"
+            android:ems="10"
+            android:hint="Phone number"
+            android:inputType="phone"
+            android:textColor="@color/cardview_dark_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="48dp"
+            android:text="Confirm ID"
+            app:layout_constraintBottom_toTopOf="@+id/activity_Signup_Password"
+            app:layout_constraintStart_toEndOf="@+id/activity_Signup_Email" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <Button
         android:id="@+id/activity_Signup_button"

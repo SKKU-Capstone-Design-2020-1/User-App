@@ -25,13 +25,16 @@
 
     <TextView
         android:id="@+id/activity_splash_textView"
-        android:layout_width="255dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="150dp"
+        android:layout_width="307dp"
+        android:layout_height="237dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="52dp"
         android:gravity="center|center_vertical"
         android:padding="5dp"
-        android:text="RSR"
+        android:text="Realtime Seat Reservation"
         android:textColor="#F9FBFF"
         android:textSize="@dimen/default_title" />
 
