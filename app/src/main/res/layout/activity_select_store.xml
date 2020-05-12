@@ -7,7 +7,7 @@
     android:background="#FFFFFF">
 
     <TextView
-        android:id="@+id/activity_login_Textview7"
+        android:id="@+id/Select_Store"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="center"
@@ -21,7 +21,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="583dp"
+        android:layout_height="616dp"
         android:layout_margin="10dip"
         android:dividerHeight="@dimen/default_margin" />
 

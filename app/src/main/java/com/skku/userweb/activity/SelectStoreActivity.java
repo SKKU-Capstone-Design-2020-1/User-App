@@ -23,12 +23,12 @@ public class SelectStoreActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_store);
         recyclerView = findViewById(R.id.recyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new StoreListAdapter(getApplicationContext());
         adapter.addItem(new Store(R.drawable.seoul_skku,"Seoul-sungkyunkwan-library","25-2 Sungkyunkwan-ro, Jongno-gu, Seoul","25/46"));
         adapter.addItem(new Store(R.drawable.suwon_skku,"Suwon-sungkyunkwan-library","2066, Seobu-ro, Jangan-gu, Suwon-si, Gyeonggi-do","31/53"));
-
+        adapter.addItem(new Store(R.drawable.modumoim,"Modumoim","102-603, Samseong-ro 292beon-gil, Yeongtong-gu, Suwon-si, Gyeonggi-do","15/42"));
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new StoreListAdapter.OnItemClickListener() {

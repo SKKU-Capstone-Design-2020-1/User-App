@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,9 +17,9 @@ import java.util.ArrayList;
 
 public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.ViewHolder> {
     Context mContext = null;
-//    ArrayList<Store> store;            지울꺼
+
     ArrayList<Store> items = new ArrayList<Store>();
-    OnItemClickListener listener; //참고로 OnItemClickListener는 기존에 있는것과 동일한 이름인데 그냥 같은 이름으로 내가 정의를 했다. (리스트뷰에서는 이게 자동구현되있어서 OnItemClickListener를 구현안하고 호출해서 클릭시 이벤트를 처리할 수 있음)
+    OnItemClickListener listener;
     public  static interface  OnItemClickListener{
         public void onItemClick(RecyclerView.ViewHolder holder, View view, int position);
     }
