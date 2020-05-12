@@ -1,14 +1,21 @@
 package com.skku.userweb.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.skku.userweb.R;
 import com.skku.userweb.adapter.StoreListAdapter;
 import com.skku.userweb.util.Store;
@@ -17,6 +24,7 @@ import com.skku.userweb.util.Store;
 public class SelectStoreActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     StoreListAdapter adapter;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,5 +46,23 @@ public class SelectStoreActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),item.getStoreName(), Toast.LENGTH_SHORT).show();
             }
         });
+
+        getData();
     }
+    private void getData() {
+        //get data from firestore "stores" collection and log the result data
+
+        db.collection("stores").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot document : task.getResult()){
+                        Log.d("store data", document.getId() + " => " + document.getData());
+                    }
+
+                }
+            }
+        });
+    }
+
 }

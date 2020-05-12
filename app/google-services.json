@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "388339566174",
+    "firebase_url": "https://seat-reservation-2600f.firebaseio.com",
+    "project_id": "seat-reservation-2600f",
+    "storage_bucket": "seat-reservation-2600f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:388339566174:android:e86e38a047293a104dd6cf",
+        "android_client_info": {
+          "package_name": "com.skku.userweb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "388339566174-sfpor05quu5n5ajp08fqiplda5h5lf7m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqMuYZjHJ1AfxJHNHyGvgiIo25ZqA7JRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "388339566174-sfpor05quu5n5ajp08fqiplda5h5lf7m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
