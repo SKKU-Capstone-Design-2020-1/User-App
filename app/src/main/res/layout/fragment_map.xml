@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".fragment.MapFragment">
 
+    <TextView
+        android:id="@+id/fragment_map_storename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Suwon-sungkyunkwan-library"
+        android:textSize="@dimen/default_font_large"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_map_remainSeat"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <TextView
         android:id="@+id/fragment_map_remainSeat"
@@ -15,7 +26,7 @@
         android:textSize="@dimen/default_font_large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_map_storename"
         app:layout_constraintBottom_toTopOf="@+id/fragment_map_sample_map"/>
 
     <Button

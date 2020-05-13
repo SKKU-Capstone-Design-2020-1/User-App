@@ -6,28 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".fragment.StatusFragment">
 
-
-    <TextView
-        android:id="@+id/fragment_status_state_textView"
+    <com.kofigyan.stateprogressbar.StateProgressBar
+        android:id="@+id/fragment_status_state_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:text="Please go to"
-        android:textSize="40sp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:spb_animateToCurrentProgressState="true"
+        app:spb_checkStateCompleted="true"
+        app:spb_currentStateDescriptionColor="@color/colorPrimary"
+        app:spb_currentStateNumber="one"
+        app:spb_maxStateNumber="three"
+        app:spb_stateBackgroundColor="#BDBDBD"
+        app:spb_stateDescriptionColor="#808080"
+        app:spb_stateForegroundColor="@color/colorPrimary"
+        app:spb_stateNumberBackgroundColor="#808080"
+        app:spb_stateNumberForegroundColor="#eeeeee" />
 
     <TextView
-        android:id="@+id/fragment_status_seatNumber_textView"
+        android:id="@+id/fragment_status_storename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A-1"
-        android:textSize="30sp"
+        android:text="Suwon-sungkyunkwan-library"
+        android:textSize="@dimen/default_font_large"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_status_seatNum_textView"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_status_state_progress_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/fragment_status_seatNum_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seat Number: A-1"
+        android:textSize="@dimen/default_font_large"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_status_remaintime_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_status_state_textView"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_status_remaintime_textView"/>
+        app:layout_constraintTop_toBottomOf="@+id/fragment_status_storename" />
 
     <TextView
         android:id="@+id/fragment_status_remaintime_textView"
@@ -52,6 +70,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/fragment_status_stepSwitch_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="step switch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
