@@ -18,7 +18,7 @@
         app:spb_checkStateCompleted="true"
         app:spb_currentStateDescriptionColor="@color/colorPrimary"
         app:spb_currentStateNumber="one"
-        app:spb_maxStateNumber="three"
+        app:spb_maxStateNumber="four"
         app:spb_stateBackgroundColor="#BDBDBD"
         app:spb_stateDescriptionColor="#808080"
         app:spb_stateForegroundColor="@color/colorPrimary"
@@ -26,33 +26,24 @@
         app:spb_stateNumberForegroundColor="#eeeeee" />
 
     <TextView
-        android:id="@+id/fragment_status_storename"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Suwon-sungkyunkwan-library"
-        android:textSize="@dimen/default_font_large"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_status_seatNum_textView"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_status_state_progress_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
         android:id="@+id/fragment_status_seatNum_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Seat Number: A-1"
         android:textSize="@dimen/default_font_large"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/fragment_status_remaintime_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_status_storename" />
+        app:layout_constraintTop_toBottomOf="@+id/fragment_status_state_progress_bar"
+        />
 
     <TextView
         android:id="@+id/fragment_status_remaintime_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="00:10:00"
-        android:textSize="70sp"
+        android:text="Reserve First"
+        android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
@@ -67,6 +58,7 @@
         android:text="return"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/default_font_normal"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -79,6 +71,38 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_status_absent_constraintlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_status_return_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_status_remaintime_textView"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/fragment_status_absenttime_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:textSize="@dimen/default_font_normal"
+            app:layout_constraintEnd_toEndOf="@+id/fragment_status_absent_constraintlayout"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_status_absent_constraintlayout"
+            app:layout_constraintTop_toTopOf="@+id/fragment_status_absent_constraintlayout"
+            app:layout_constraintStart_toEndOf="@+id/fragment_status_chair_image"
+             />
+
+        <ImageView
+            android:id="@+id/fragment_status_chair_image"
+            android:layout_width="@dimen/default_font_large"
+            android:layout_height="@dimen/default_font_large"
+            android:src="@drawable/status_chair"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_status_absenttime_textView"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_status_absent_constraintlayout"
+            app:layout_constraintTop_toTopOf="@+id/fragment_status_absent_constraintlayout"
+            app:layout_constraintStart_toStartOf="@+id/fragment_status_absent_constraintlayout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
