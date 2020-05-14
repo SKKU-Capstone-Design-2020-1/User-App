@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "388339566174-0up0l7eq9vq1669bte50eoi0jh93udb9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.skku.userweb",
+            "certificate_hash": "6e6777ff84f2d7de1d1fe808ea0d72e6fd26a0c6"
+          }
+        },
+        {
           "client_id": "388339566174-sfpor05quu5n5ajp08fqiplda5h5lf7m.apps.googleusercontent.com",
           "client_type": 3
         }
