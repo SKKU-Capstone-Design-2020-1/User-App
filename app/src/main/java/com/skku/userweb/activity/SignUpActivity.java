@@ -30,9 +30,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText editTextEmail, editTextPassword, editTextPasswordConfirm, editTextUsername, editTextPhone;
     private ProgressBar progressBar;
     public Button validateButton;
-    //  private boolean validate = false;
 
-    //private DatabaseReference databaseReference;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -57,18 +55,14 @@ public class SignUpActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
 
 
-       /* if (firebaseAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
-            finish();
-        }*/
-
         findViewById(R.id.activity_Signup_button).setOnClickListener(onClickListener);
 
+        //Login activity로 이동
         TextView textView = (TextView) findViewById(R.id.activity_Signup_login);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class); //register activity로 바꿔야 함
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
 
             }
