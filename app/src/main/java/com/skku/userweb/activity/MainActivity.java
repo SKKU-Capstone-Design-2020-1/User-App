@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Toolbar mToolbar= (Toolbar) findViewById(R.id.main_toolbar);
-        mToolbar.setTitle("");
+        mToolbar.setTitle("Suwon-sungkyunkwan-library");    // store name
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
