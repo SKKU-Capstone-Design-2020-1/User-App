@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
-    private static final String TAG = "SignuPActivity";
+    private static final String TAG = "LoginActivity";
     private EditText editTextEmail, editTextPassword;
 
     private FirebaseAuth firebaseAuth;
@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.activity_login_Login:
-                    SignIn();
+                    SignIn(view);
                     break;
                  //case R.id.
 
@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    private void  SignIn() {
+    private void  SignIn(View view) {
 
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
@@ -106,8 +106,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (password.isEmpty()) {
-            editTextEmail.setError("Enter password");
-            editTextEmail.requestFocus();
+           editTextPassword.setError("Enter password");
+           editTextPassword.requestFocus();
             return;
         }
 
@@ -117,30 +117,31 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                        if(task.isSuccessful()) {
+                            Log.d(TAG, "signInWithEmail:success");
+                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_LONG).show();
-                           // startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        }
+                        else {
 
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            if (task.getException() != null) {
-                                Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
 
-                            }
+                            Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+
 
                         }
 
                     }
                 });
+
+
 
     }
 

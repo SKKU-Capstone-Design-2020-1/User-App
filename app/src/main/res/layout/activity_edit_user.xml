@@ -24,30 +24,23 @@
         android:id="@+id/activity_EditUser_constraintLayout1"
         android:layout_width="match_parent"
         android:layout_height="343dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_toolbar">
+
 
         <TextView
             android:id="@+id/activity_EditUser_name"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="28dp"
             android:text="Name"
-            app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_divider1"
+            app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_phone"
             app:layout_constraintStart_toStartOf="@+id/activity_EditUser_constraintLayout1"
-            app:layout_constraintTop_toTopOf="@+id/activity_EditUser_constraintLayout1" />
-
-        <TextView
-            android:id="@+id/activity_EditUser_email"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:text="e-mail"
-            app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_divider2"
-            app:layout_constraintStart_toStartOf="@+id/activity_EditUser_constraintLayout1"
-            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider1" />
+            app:layout_constraintTop_toTopOf="@+id/activity_EditUser_constraintLayout1"
+            app:layout_constraintVertical_bias="0.664" />
 
         <TextView
             android:id="@+id/activity_EditUser_phone"
@@ -88,6 +81,7 @@
             android:background="#00000000"
             app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_divider2"
             app:layout_constraintEnd_toEndOf="@+id/activity_EditUser_constraintLayout1"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/activity_EditUser_constraintLayout1"
             app:layout_constraintTop_toTopOf="@+id/activity_EditUser_constraintLayout1" />
 
@@ -124,69 +118,56 @@
 
         <EditText
             android:id="@+id/activity_EditUser_editName"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="295dp"
+            android:layout_height="69dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Minki Kim"
-            app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_divider1"
-            app:layout_constraintEnd_toEndOf="@+id/activity_EditUser_constraintLayout1"
-            app:layout_constraintStart_toEndOf="@+id/activity_EditUser_name"
-            app:layout_constraintTop_toTopOf="@+id/activity_EditUser_constraintLayout1" />
 
-        <EditText
-            android:id="@+id/activity_EditUser_editEmail"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            android:text="rlaalsrl7777@naver.com"
-            app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_divider2"
+            app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_editPhone"
             app:layout_constraintEnd_toEndOf="@+id/activity_EditUser_constraintLayout1"
-            app:layout_constraintStart_toEndOf="@+id/activity_EditUser_email"
-            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider1" />
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/activity_EditUser_name"
+            app:layout_constraintTop_toTopOf="@+id/activity_EditUser_constraintLayout1"
+            app:layout_constraintVertical_bias="1.0" />
 
         <EditText
             android:id="@+id/activity_EditUser_editPhone"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
+            android:autofillHints="010-1234-5678"
             android:ems="10"
             android:inputType="phone"
             app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_divider3"
             app:layout_constraintEnd_toEndOf="@+id/activity_EditUser_constraintLayout1"
             app:layout_constraintStart_toEndOf="@+id/activity_EditUser_phone"
-            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider2"
-            android:autofillHints="010-1234-5678" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider2" />
 
         <EditText
             android:id="@+id/activity_EditUser_editPassword"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
+            android:autofillHints="enter password"
             android:ems="10"
             android:inputType="numberPassword"
             app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_divider4"
             app:layout_constraintEnd_toEndOf="@+id/activity_EditUser_constraintLayout1"
             app:layout_constraintStart_toEndOf="@+id/activity_EditUser_password"
-            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider3"
-            android:autofillHints="enter password" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider3" />
 
         <EditText
             android:id="@+id/activity_EditUser_editconfirm"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
+            android:autofillHints="enter password again"
             android:ems="10"
             android:inputType="numberPassword"
             app:layout_constraintBottom_toBottomOf="@+id/activity_EditUser_constraintLayout1"
             app:layout_constraintEnd_toEndOf="@+id/activity_EditUser_constraintLayout1"
             app:layout_constraintStart_toEndOf="@+id/activity_EditUser_confirm"
-            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider4"
-            android:autofillHints="enter password again" />
-
+            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider4" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

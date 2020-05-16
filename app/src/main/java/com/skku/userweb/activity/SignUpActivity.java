@@ -2,6 +2,8 @@ package com.skku.userweb.activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,25 +14,39 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.common.api.Response;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.skku.userweb.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 
-public class SignUpActivity extends AppCompatActivity {
+public class SignUpActivity<RegisterActivity> extends AppCompatActivity {
 
     private static final String TAG = "SignuPActivity";
     private EditText editTextEmail, editTextPassword, editTextPasswordConfirm, editTextUsername, editTextPhone;
     private ProgressBar progressBar;
     public Button validateButton;
-
+    private boolean validate=false;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -38,6 +54,8 @@ public class SignUpActivity extends AppCompatActivity {
     // 파이어베이스 인증 객체 생성
     private FirebaseAuth firebaseAuth;
     String userID;
+    String Email_check;
+
 
 
 
@@ -56,6 +74,9 @@ public class SignUpActivity extends AppCompatActivity {
 
 
         findViewById(R.id.activity_Signup_button).setOnClickListener(onClickListener);
+       findViewById(R.id.activity_Signup_ID_check_button).setOnClickListener(onClickListener);
+
+
 
         //Login activity로 이동
         TextView textView = (TextView) findViewById(R.id.activity_Signup_login);
@@ -71,10 +92,12 @@ public class SignUpActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        super.onStart();
-        if(firebaseAuth.getCurrentUser() !=null){
 
-        }
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
+        //updateUI(currentUser);
     }
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -84,11 +107,14 @@ public class SignUpActivity extends AppCompatActivity {
                 case R.id.activity_Signup_button:
                     resigterUser();
                     break;
+                case R.id.activity_Signup_ID_check_button:
+                    ID_check();
+                    break;
+
 
             }
         }
     };
-
 
 
     private void  resigterUser() {
@@ -117,8 +143,8 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         if (password.isEmpty()) {
-            editTextEmail.setError("Enter password");
-            editTextEmail.requestFocus();
+            editTextPassword.setError("Enter password");
+            editTextPassword.requestFocus();
             return;
         }
 
@@ -175,7 +201,8 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 });
 
-                startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
+
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
             } else {
 
@@ -183,6 +210,32 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void ID_check(){
+
+        final String email = editTextEmail.getText().toString();
+
+        CollectionReference usersRef = db.collection("users");
+        Query query = usersRef.whereEqualTo("email", email);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot documentSnapshot : task.getResult()){
+                        String user = documentSnapshot.getString("email");
+
+                        if(user.equals(email)){
+                            Log.d(TAG, "User Exists");
+                            Toast.makeText(SignUpActivity.this, "email exists", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }
+            }
+        });
+
+
     }
 
 
