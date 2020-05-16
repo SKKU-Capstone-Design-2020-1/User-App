@@ -2,9 +2,17 @@ package com.skku.userweb.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,8 +52,22 @@ public class SelectStoreActivity extends AppCompatActivity {
             public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 Store item = adapter.getItem(position);
                 Toast.makeText(getApplicationContext(),item.getStoreName(), Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(SelectStoreActivity.this,MainActivity.class);
+                //startActivity(intent);                        주석해제 메인액티비티로 이동
             }
         });
+
+        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if ( Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions( SelectStoreActivity.this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },0 );
+        }
+            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+            double altitude = location.getAltitude();
+            Toast.makeText(getApplicationContext(),"위도 : " + longitude + "\n" +
+                    "경도 : " + latitude + "\n" + "고도  : " + altitude, Toast.LENGTH_LONG).show();
 
         getData();
     }
@@ -59,7 +81,6 @@ public class SelectStoreActivity extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : task.getResult()){
                         Log.d("store data", document.getId() + " => " + document.getData());
                     }
-
                 }
             }
         });
