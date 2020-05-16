@@ -69,6 +69,7 @@
             android:layout_marginLeft="100dp"
             android:background="@drawable/primary_outlined_edittext"
             android:hint="  ID (E-mail)"
+            android:padding="10dp"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:textSize="15dp"
@@ -98,6 +99,8 @@
             android:layout_height="325dp"
             android:layout_gravity="center"
             android:layout_marginLeft="100dp"
+            android:gravity="top"
+            android:padding="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/primary_outlined_edittext"
 

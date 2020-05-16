@@ -1,5 +1,6 @@
 package com.skku.userweb.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,8 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -23,10 +26,15 @@ import com.skku.userweb.R;
  * create an instance of this fragment.
  */
 public class ContactFragment extends Fragment {
+      //TextView userId = (TextView)findViewById(R.id.fagment_contact_id);        edit를 text로 바꿀 것
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Intent intent = getIntent();
+//        String id=intent.getStringExtra("user_id");
+//        userId.setText(id);
+
     }
 
     @Override
@@ -38,8 +46,6 @@ public class ContactFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_contact, container, false);
 
     }
-
-
 
 
 }
