@@ -105,9 +105,7 @@ public class EditUserActivity extends AppCompatActivity {
                     break;
                 //save button
                 case R.id.activity_EditUser_save_change_button:
-                  //  onStart();
                     editdata(view);
-                    // startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     break;
             }
         }

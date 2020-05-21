@@ -65,18 +65,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
 
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
-        //updateUI(currentUser);
     }
-/*
-    @Override
-    public  void onBackPressed(){
-        super.onBackPressed();
-        finish();
 
-    }*/
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -85,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
                 case R.id.activity_login_Login:
                     SignIn(view);
                     break;
-                 //case R.id.
+
 
             }
         }
@@ -150,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                             if(task.getException() !=null){
                                 Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
                             }
-                           
+
                         }
 
                     }

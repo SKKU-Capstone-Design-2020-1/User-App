@@ -1,12 +1,20 @@
 package com.skku.userweb.fragment;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +34,19 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.skku.userweb.R;
 
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.Identifier;
+import org.altbeacon.beacon.MonitorNotifier;
+import org.altbeacon.beacon.RangeNotifier;
+import org.altbeacon.beacon.Region;
+
+import java.util.Collection;
 
 
-
-
-public class StatusFragment extends Fragment {
+public class StatusFragment extends Fragment implements BeaconConsumer {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -46,12 +62,51 @@ public class StatusFragment extends Fragment {
     private boolean isAbsent = false;
     private ConstraintLayout absentLayout;
 
+    public static final String BeaconsEverywhere = "BeaconsEverywhere";
+    private BeaconManager beaconManager;
+    public static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 999;
+
+    private Boolean realbeacon =false;
+
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getData();
+
+        /*Beacon permission*/
+        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            Log.i(BeaconsEverywhere,"location!!!!!!!!");
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_ACCESS_FINE_LOCATION
+            );
+        } else{
+            beaconManager = BeaconManager.getInstanceForApplication(getActivity());
+            beaconManager.getBeaconParsers().add(new BeaconParser()
+                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+            //이건 알트비콘의 layout 입니다
+//            //2-3/4-19이런 것들은 다 byte position 을 의미합니다
+
+            beaconManager.bind(this);
+            Log.i(BeaconsEverywhere,"beacons bind success");
+
+        }
+//                }
+//        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+//        } else {
+//            beaconManager=BeaconManager.getInstanceForApplication(this);
+//            beaconManager.getBeaconParsers().add(new BeaconParser()
+//                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+//            //이건 알트비콘의 layout 입니다
+//            //2-3/4-19이런 것들은 다 byte position 을 의미합니
+//
+//            beaconManager.bind(this);
+//        }
 
     }
 
@@ -118,6 +173,97 @@ public class StatusFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+
+        beaconManager.unbind(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBeaconServiceConnect() {
+        final Region region = new Region("myBeacons", Identifier.parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), null, null);
+
+        beaconManager.addMonitorNotifier(new MonitorNotifier() {
+            @Override
+            public void didEnterRegion(Region region) {
+                try{
+                    Log.i(BeaconsEverywhere, "I just saw an beacon for the first time! Id1->"+region.getId1()
+                            +" id 2:"+region.getId2()+" id 3:"+region.getId3());
+
+                    //첫번째 아이디는 UUID
+                    //두번째 아이디는 major
+                    //세번째 아이디는 minor
+
+                    beaconManager.startRangingBeaconsInRegion(region);
+                } catch(RemoteException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void didExitRegion(Region region) {
+                try {
+                    Log.d(BeaconsEverywhere, "did exit region");
+                    beaconManager.stopRangingBeaconsInRegion(region);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void didDetermineStateForRegion(int i, Region region) {
+
+            }
+        });
+
+        beaconManager.addRangeNotifier(new RangeNotifier() {
+            @Override
+            public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
+                Log.i(BeaconsEverywhere,"beacons.size less then 0");
+                if(collection.size() > 0){
+                    Log.i(BeaconsEverywhere, "The first beacon I see is about " + collection.iterator().next().getDistance() + " meters away.");
+                    for(Beacon beacon: collection){
+                        if(beacon.getDistance() < 5.0){
+                            realbeacon = true;
+                            Log.d(BeaconsEverywhere, "I see a beacon that in inside the 2.0 range");
+                        }
+                        else{
+                            realbeacon = false;
+                            Log.d(BeaconsEverywhere, "I see a beacon that in outside the 2.0 range");
+                        }
+                    }
+                }else{
+                    realbeacon = false;
+                    Log.d(BeaconsEverywhere, "Where is beacon...");
+                }
+            }
+        });
+
+        try{
+            beaconManager.startMonitoringBeaconsInRegion(region);
+        } catch (RemoteException e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    @Override
+    public Context getApplicationContext() {
+        return null;
+    }
+
+    @Override
+    public void unbindService(ServiceConnection serviceConnection) {
+
+    }
+
+    @Override
+    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
+        return false;
     }
 
     public class MyCountDownTimer extends CountDownTimer{
@@ -261,6 +407,9 @@ public class StatusFragment extends Fragment {
         });
 
     }
+
+
+
 //    private void getData(){
 //        DocumentReference docRef = db.collection("stores").document("eOc1iI2gvDUWy9LeA4hw");
 //
