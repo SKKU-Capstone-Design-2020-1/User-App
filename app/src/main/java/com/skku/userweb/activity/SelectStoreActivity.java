@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,10 +29,13 @@ import com.skku.userweb.R;
 import com.skku.userweb.adapter.StoreListAdapter;
 import com.skku.userweb.util.Store;
 
+import java.util.List;
+
 
 public class SelectStoreActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     StoreListAdapter adapter;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -42,9 +46,6 @@ public class SelectStoreActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new StoreListAdapter(getApplicationContext());
-        adapter.addItem(new Store(R.drawable.seoul_skku,"Seoul-sungkyunkwan-library","25-2 Sungkyunkwan-ro, Jongno-gu, Seoul","25/46"));
-        adapter.addItem(new Store(R.drawable.suwon_skku,"Suwon-sungkyunkwan-library","2066, Seobu-ro, Jangan-gu, Suwon-si, Gyeonggi-do","31/53"));
-        adapter.addItem(new Store(R.drawable.modumoim,"Modumoim","102-603, Samseong-ro 292beon-gil, Yeongtong-gu, Suwon-si, Gyeonggi-do","15/42"));
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener(new StoreListAdapter.OnItemClickListener() {
@@ -68,7 +69,6 @@ public class SelectStoreActivity extends AppCompatActivity {
             double altitude = location.getAltitude();
             Toast.makeText(getApplicationContext(),"위도 : " + longitude + "\n" +
                     "경도 : " + latitude + "\n" + "고도  : " + altitude, Toast.LENGTH_LONG).show();
-
         getData();
     }
     private void getData() {
@@ -79,7 +79,18 @@ public class SelectStoreActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()){
-                        Log.d("store data", document.getId() + " => " + document.getData());
+                        //Log.d("store data", document.getId() + " => " + document.getData());
+                        String address= (String) document.getData().get("address");
+                        String imgurl= (String) document.getData().get("img_url");
+                        Double latitude= (Double) document.getData().get("latitude");
+                        Double longtitude= (Double) document.getData().get("longtitude");
+                        String storeName= (String) document.getData().get("name");
+                        Long num_users= (Long) document.getData().get("num_users");
+                        Long num_seats= (Long) document.getData().get("num_seats");
+                        String remained=num_users+"/"+num_seats;
+                        Log.d("test", remained);
+                        adapter.addItem(new Store(imgurl,storeName,address,remained));
+                        recyclerView.setAdapter(adapter);
                     }
                 }
             }

@@ -1,17 +1,17 @@
 package com.skku.userweb.util;
 
 public class Store {
-    private int storeImage;
+    private String storeImage;
     private String storeName;
     private String storeAddress;
     private String remainedSeat;
-    public Store(int storeImage, String storeName, String storeAddress, String remainedSeat){
+    public Store(String storeImage, String storeName, String storeAddress, String remainedSeat){
         this.storeImage = storeImage;
         this.storeName = storeName;
         this.storeAddress = storeAddress;
         this.remainedSeat = remainedSeat;
     }
-    public int getStoreImage(){
+    public String getStoreImage(){
         return this.storeImage;
     }
     public String getStoreName(){
