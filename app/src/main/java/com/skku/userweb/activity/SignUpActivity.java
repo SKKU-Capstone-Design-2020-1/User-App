@@ -202,7 +202,7 @@ public class SignUpActivity<RegisterActivity> extends AppCompatActivity {
                 });
 
 
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), SelectStoreActivity.class));
 
             } else {
 

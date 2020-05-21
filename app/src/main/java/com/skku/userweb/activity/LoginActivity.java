@@ -61,6 +61,22 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
+        //updateUI(currentUser);
+    }
+/*
+    @Override
+    public  void onBackPressed(){
+        super.onBackPressed();
+        finish();
+
+    }*/
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -130,12 +146,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         else {
 
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-
-                            Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-
-
+                          //  Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            if(task.getException() !=null){
+                                Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+                            }
+                           
                         }
 
                     }
