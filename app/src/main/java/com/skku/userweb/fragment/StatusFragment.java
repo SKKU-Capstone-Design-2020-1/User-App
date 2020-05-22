@@ -14,6 +14,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,13 +26,16 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.base.Objects;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import com.google.firebase.firestore.Source;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.skku.userweb.R;
 
@@ -43,7 +48,11 @@ import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
+import java.sql.Time;
 import java.util.Collection;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class StatusFragment extends Fragment implements BeaconConsumer {
@@ -54,19 +63,38 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
     private TextView ab_time;
     private MyCountDownTimer myCountDownTimer;
     private AbsentCountDownTimer absentCountDownTimer;
-    private String[] descriptionData = {"Ready", "Go", "Using", "timeout"};  //추후 예약전 상태도 입력 예정
+    private String[] descriptionData = {"Ready", "Go", "Using"};  //추후 예약전 상태도 입력 예정
     private StateProgressBar stateProgressBar;
     private int gotime = 15;
     private int usingtime = 10;
-    private int absenttime = 5;
+    private int breaktime = 5;
     private boolean isAbsent = false;
     private ConstraintLayout absentLayout;
 
-    public static final String BeaconsEverywhere = "BeaconsEverywhere";
+    private static final String BeaconsEverywhere = "BeaconsEverywhere";
     private BeaconManager beaconManager;
-    public static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 999;
+    private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 999;
+    private String beaconnumber;
 
     private Boolean realbeacon =false;
+
+    //private TimerTask beaconCheacker;
+
+    private TextView seatnum;
+    private Button returnButton;
+
+//    private Timer timer = new Timer();
+
+//    private final Handler handler = new Handler() {
+//        public void handleMessage(Message msg) {
+//            //absentLayout.setVisibility(View.VISIBLE);
+//            absentCountDownTimer = new AbsentCountDownTimer(breaktime * 1000, 1000);
+//            absentCountDownTimer.start();
+//            isAbsent = true;
+//            beaconCheacker.cancel();
+//            Log.e("stop", "tt task stop");
+//        }
+//    };
 
 
 
@@ -77,23 +105,24 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
 
         /*Beacon permission*/
         if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-            Log.i(BeaconsEverywhere,"location!!!!!!!!");
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.i(BeaconsEverywhere, "location!!!!!!!!");
             requestPermissions(
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_ACCESS_FINE_LOCATION
             );
-        } else{
-            beaconManager = BeaconManager.getInstanceForApplication(getActivity());
-            beaconManager.getBeaconParsers().add(new BeaconParser()
-                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-            //이건 알트비콘의 layout 입니다
+        }
+        beaconManager = BeaconManager.getInstanceForApplication(getActivity());
+        beaconManager.getBeaconParsers().add(new BeaconParser()
+                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+        //이건 알트비콘의 layout 입니다
 //            //2-3/4-19이런 것들은 다 byte position 을 의미합니다
 
-            beaconManager.bind(this);
-            Log.i(BeaconsEverywhere,"beacons bind success");
+        beaconManager.bind(this);
+        Log.i(BeaconsEverywhere,"beacons bind success");
 
-        }
+
+
 //                }
 //        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
 //                != PackageManager.PERMISSION_GRANTED) {
@@ -121,11 +150,11 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
 
         tv_time = (TextView) rootView.findViewById(R.id.fragment_status_remaintime_textView);
         ab_time = (TextView) rootView.findViewById(R.id.fragment_status_absenttime_textView);
-        TextView seatnum = (TextView) rootView.findViewById(R.id.fragment_status_seatNum_textView);
+        seatnum = (TextView) rootView.findViewById(R.id.fragment_status_seatNum_textView);
         absentLayout = (ConstraintLayout) rootView.findViewById(R.id.fragment_status_absent_constraintlayout);
         
         Button stepSwitchButton = (Button) rootView.findViewById(R.id.fragment_status_stepSwitch_button);
-        Button returnButton = (Button) rootView.findViewById(R.id.fragment_status_return_button);
+        returnButton = (Button) rootView.findViewById(R.id.fragment_status_return_button);
 
 
 
@@ -134,43 +163,41 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         stepSwitchButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                if(stateProgressBar.getCurrentStateNumber() == 1){
+                    myCountDownTimer = new MyCountDownTimer(gotime*1000, 1000);
+                    myCountDownTimer.start();
+                    seatnum.setVisibility(View.VISIBLE);
+                    returnButton.setVisibility(View.VISIBLE);
+                    stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+                    changeSeatStatus(1);
+                }
+
+            }
+        });
+
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // return seat
                 switch (stateProgressBar.getCurrentStateNumber()){
-                    case 1:
-                        myCountDownTimer = new MyCountDownTimer(gotime*1000, 1000);
-                        myCountDownTimer.start();
-                        seatnum.setVisibility(View.VISIBLE);
-                        returnButton.setVisibility(View.VISIBLE);
-                        stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-                        break;
 
                     case 2:
                         myCountDownTimer.cancel();
-                        myCountDownTimer = new MyCountDownTimer(usingtime*1000, 1000);
-                        myCountDownTimer.start();
-                        stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
                         break;
 
                     case 3:
-                        if (!isAbsent){
-                            absentLayout.setVisibility(View.VISIBLE);
-                            absentCountDownTimer = new AbsentCountDownTimer(absenttime*1000, 1000);
-                            absentCountDownTimer.start();
-                            isAbsent = true;
-                        }
-                        else{
+                        if (isAbsent){
                             absentCountDownTimer.cancel();
                             absentLayout.setVisibility(View.INVISIBLE);
                             isAbsent = false;
                         }
                         break;
-
-                    case 4:
-                        stateProgressBar.setAllStatesCompleted(true);
-                        break;
                 }
-
+                returnSeat();
             }
         });
+
+
 
         return rootView;
     }
@@ -228,16 +255,23 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
                     for(Beacon beacon: collection){
                         if(beacon.getDistance() < 5.0){
                             realbeacon = true;
-                            Log.d(BeaconsEverywhere, "I see a beacon that in inside the 2.0 range");
                         }
                         else{
                             realbeacon = false;
-                            Log.d(BeaconsEverywhere, "I see a beacon that in outside the 2.0 range");
+                            Log.d(BeaconsEverywhere, "I see a beacon that in outside the 5.0 range");
+                            if(stateProgressBar.getCurrentStateNumber() == 3 && !isAbsent){
+                                isAbsent = true;
+                                absentStart();
+                            }
                         }
                     }
                 }else{
                     realbeacon = false;
                     Log.d(BeaconsEverywhere, "Where is beacon...");
+                    if(stateProgressBar.getCurrentStateNumber() == 3 && !isAbsent){
+                        isAbsent = true;
+                        absentStart();
+                    }
                 }
             }
         });
@@ -274,8 +308,12 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         @Override
         public void onTick(long millisUntilFinished) {
 
+            if(realbeacon){
 
-            int progress = (int) (millisUntilFinished/1000);
+                usingSeat();
+
+            }
+            //int progress = (int) (millisUntilFinished/1000);
             //progress = 시간이 지난 정도
 
             /*텍스트로 시간 보여주는 부분*/
@@ -304,35 +342,17 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
             } else {
                 tv_time.setText(hours + ":" + minutes + ":" + seconds);
             }
+            if(stateProgressBar.getCurrentStateNumber() == 3){
+                tv_time.setText("Using time");
+            }
 
         }
 
         @Override
         public void onFinish() {
-            switch (stateProgressBar.getCurrentStateNumber()){
-
-                case 2:
-                    // 1. go 상황이였을때 타이머 종료
-                    // 유저상태 예약전으로 하고 map화면으로 전환
-                    stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
-                    // map화면으로 전환
-                    break;
-
-                case 3:
-                    // 2. using 상황에서 타이머 종료
-                    // 유저상태 예약전으로 하기
-                    stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
-
-                    if (isAbsent){
-                        absentCountDownTimer.cancel();
-                        absentLayout.setVisibility(View.INVISIBLE);
-                        isAbsent = false;
-                    }
-                    // 3. 자리비움 상황에서 자리비움꺼 타이머 종료
-                    // 유저상태 예약전으로 하기
-                    //
-                    tv_time.setText("Time out");
-                    break;
+            if(stateProgressBar.getCurrentStateNumber() == 2){
+                // map화면으로 전환
+                returnSeat();
             }
 
             myCountDownTimer.cancel();
@@ -347,7 +367,14 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
 
         @Override
         public void onTick(long millisUntilFinished) {
-
+            if(realbeacon){
+//                beaconCheacker = timerTaskMaker();
+//                timer.schedule(beaconCheacker, 0, 1000);
+                isAbsent = false;
+                absentCountDownTimer.cancel();
+                absentLayout.setVisibility(View.INVISIBLE);
+                tv_time.setText("Using time");
+            }
 
             int progress = (int) (millisUntilFinished/1000);
             //progress = 시간이 지난 정도
@@ -379,17 +406,19 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
                 ab_time.setText(hours + ":" + minutes + ":" + seconds);
             }
 
+
+
         }
 
         @Override
         public void onFinish() {
             // 유저상태 예약전으로 하고 map화면으로 전환
-            stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.FOUR);
-            myCountDownTimer.cancel();
             absentLayout.setVisibility(View.INVISIBLE);
             isAbsent = false;
-            tv_time.setText("Time out");
             absentCountDownTimer.cancel();
+
+            // map화면으로 전환
+            returnSeat();
 
         }
     }
@@ -398,32 +427,138 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         db.document("stores/eOc1iI2gvDUWy9LeA4hw").get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
-                Object dd = document.getData().get("limit_time");
-                Log.d("status", "limit_time: " + dd);
-                gotime = Integer.parseInt(dd.toString());
+                Object go = document.getData().get("go_time");
+                Log.d("status", "go_time: " + go);
+                gotime = Integer.parseInt(go.toString());
                 // usingtime
+                Object bre = document.getData().get("break_time");
+                Log.d("status", "break_time: " + bre);
+                breaktime = Integer.parseInt(bre.toString());
                 // seatnum
             }
         });
+        // 특정 자리 데이터 가져오기
+        db.document("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups/7PgDMSVxQmpQqAkOVekX").get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                Object beaconidList = document.getData().get("beacon_ids");
+                Log.d("status", "beaconid: " + beaconidList);
+                beaconnumber = beaconidList.toString();
+                // aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+                int len_beaconnumber = beaconnumber.length();
+                beaconnumber = beaconnumber.substring(1, len_beaconnumber - 2);
+                Log.d("status", "beacon number: " + beaconnumber);
 
-    }
-
-
-
-//    private void getData(){
-//        DocumentReference docRef = db.collection("stores").document("eOc1iI2gvDUWy9LeA4hw");
+            }
+        });
+        // 특정 자리 데이터 가져오기
+//        db.document("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups/7PgDMSVxQmpQqAkOVekX/seats").get().addOnCompleteListener(task -> {
+//            if(task.isSuccessful()){
+//                DocumentSnapshot document = task.getResult();
+//                Object bbbb = document.getData();
+//                Log.d("status", "seat: " + bbbb);
+////                beaconnumber = beaconidList.toString();
+////                // aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+////                int len_beaconnumber = beaconnumber.length();
+////                beaconnumber = beaconnumber.substring(1, len_beaconnumber - 2);
+////                Log.d("status", "beacon number: " + beaconnumber);
 //
-//    }
+//            }
+//        });
+//        db.collection("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups")
+//                .whereEqualTo("map_id", "td130wl")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Log.d("seatGroups", document.getId() + " => " + document.getData());
+//                            }
+//                        } else {
+//                            Log.d("status", "Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+        DocumentReference docRef = db.collection("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups").document("7PgDMSVxQmpQqAkOVekX");
 
-//    private void getData(){
-//        db.collection("stores").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        // Source can be CACHE, SERVER, or DEFAULT.
+        Source source = Source.CACHE;
+
+//        docRef.update(
+//                "seats.0.status", 1
+//        );
+
+        // Get the document, forcing the SDK to use the offline cache
+        docRef.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    // Document found in the offline cache
+                    DocumentSnapshot document = task.getResult();
+                    Log.d("ssssssssssssssss", "Cached document data: " + document.getData());
+                    Log.d("ssssssssssssssss", "seats: " + document.getData().get("seats"));
+                    Object aa = document.getData().get("seats");
+                    //D/ssssssssssssssss: Cached document data: {beacon_ids=[aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa], map_id=td130w1, seat_id=a5330mz, deg=0, x=293, y=232, seats=[{id=3, status=0}, {id=4, status=0}]}
+                    //D/ssssssssssssssss: seats: [{id=3, status=0}, {id=4, status=0}]
+
+
+                } else {
+                    Log.d("TAG", "Cached get failed: ", task.getException());
+                }
+            }
+        });
+
+//        CollectionReference citiesRef = db.collection("stores/eOc1iI2gvDUWy9LeA4hw");
+//        Query query = citiesRef.whereEqualTo("seatGroups", "7PgDMSVxQmpQqAkOVekX");
+//        db.collection("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups/7PgDMSVxQmpQqAkOVekX/beacon_ids")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 //            @Override
 //            public void onComplete(@NonNull Task<QuerySnapshot> task) {
 //                if(task.isSuccessful()){
-//
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        Log.d("status", document.getId() + " => " + document.getData());
+//                    }
+//                }else{
+//                    Log.e("status", "Error getting documents: ", task.getException());
 //                }
 //            }
 //        });
-//    }
+
+    }
+    private void usingSeat(){
+        myCountDownTimer.cancel();
+
+        stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
+        //tv_time.setVisibility(View.INVISIBLE);
+        tv_time.setText("Using time");
+        Log.d("tv", "tv!!!!!!!!!!!!!!!!!!!!!!!!");
+        isAbsent = false;
+        changeSeatStatus(2);
+    }
+
+    private void absentStart(){
+        absentLayout.setVisibility(View.VISIBLE);
+        tv_time.setText("Absent");
+        absentCountDownTimer = new AbsentCountDownTimer(breaktime*1000, 1000);
+        absentCountDownTimer.start();
+        Log.d("absent", "absent start");
+
+
+    }
+    private void returnSeat(){
+        seatnum.setVisibility(View.INVISIBLE);
+        returnButton.setVisibility(View.INVISIBLE);
+        tv_time.setText("Reserve First");
+        stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
+
+        changeSeatStatus(0);
+    }
+
+    private void changeSeatStatus(int newStatus){
+        // todo: change data to newStatus
+
+    }
 
 }
