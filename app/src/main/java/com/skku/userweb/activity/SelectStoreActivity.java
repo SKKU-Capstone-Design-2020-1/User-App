@@ -66,9 +66,8 @@ public class SelectStoreActivity extends AppCompatActivity {
             Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             double longitude = location.getLongitude();
             double latitude = location.getLatitude();
-            double altitude = location.getAltitude();
             Toast.makeText(getApplicationContext(),"위도 : " + longitude + "\n" +
-                    "경도 : " + latitude + "\n" + "고도  : " + altitude, Toast.LENGTH_LONG).show();
+                    "경도 : " + latitude, Toast.LENGTH_LONG).show();
         getData();
     }
     private void getData() {

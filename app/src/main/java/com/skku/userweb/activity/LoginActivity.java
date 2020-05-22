@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.skku.userweb.R;
+import com.skku.userweb.fragment.ContactFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,12 +34,13 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private EditText editTextEmail, editTextPassword;
-
+    private Bundle bundle;
     private FirebaseAuth firebaseAuth;
-
+    private ContactFragment ContactFragment;
     //activity 부분
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -133,7 +135,11 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                              FirebaseUser user = firebaseAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_LONG).show();
-
+                            ContactFragment = new ContactFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("userId", email);
+                            ContactFragment.setArguments(bundle);
+                            Log.d("test",email);
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }
                         else {
