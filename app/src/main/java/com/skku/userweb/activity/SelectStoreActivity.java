@@ -27,6 +27,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.skku.userweb.R;
 import com.skku.userweb.adapter.StoreListAdapter;
+import com.skku.userweb.fragment.ContactFragment;
+import com.skku.userweb.util.GlobalVar;
 import com.skku.userweb.util.Store;
 
 import java.util.List;
@@ -47,14 +49,23 @@ public class SelectStoreActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new StoreListAdapter(getApplicationContext());
         recyclerView.setAdapter(adapter);
+        GlobalVar userId = (GlobalVar) getApplication();
+        Toast.makeText(getApplicationContext(),userId.getUserId(), Toast.LENGTH_SHORT).show();
 
         adapter.setOnItemClickListener(new StoreListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 Store item = adapter.getItem(position);
-                Toast.makeText(getApplicationContext(),item.getStoreName(), Toast.LENGTH_SHORT).show();
-                //Intent intent = new Intent(SelectStoreActivity.this,MainActivity.class);
-                //startActivity(intent);                        주석해제 메인액티비티로 이동
+                //Toast.makeText(getApplicationContext(),item.getStoreId(), Toast.LENGTH_SHORT).show();
+                GlobalVar storeId = (GlobalVar) getApplication();
+                storeId.setStoreId(item.getStoreId());
+                ContactFragment fragment = new ContactFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("storeId",item.getStoreId());
+                fragment.setArguments(bundle);
+                Toast.makeText(getApplicationContext(),storeId.getStoreId(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SelectStoreActivity.this,MainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -78,7 +89,8 @@ public class SelectStoreActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()){
-                        //Log.d("store data", document.getId() + " => " + document.getData());
+                        Log.d("store data", document.getId() + " => " + document.getData());
+                        String storeid = (String) document.getId();
                         String address= (String) document.getData().get("address");
                         String imgurl= (String) document.getData().get("img_url");
                         Double latitude= (Double) document.getData().get("latitude");
@@ -87,8 +99,7 @@ public class SelectStoreActivity extends AppCompatActivity {
                         Long num_users= (Long) document.getData().get("num_users");
                         Long num_seats= (Long) document.getData().get("num_seats");
                         String remained=num_users+"/"+num_seats;
-                        Log.d("test", remained);
-                        adapter.addItem(new Store(imgurl,storeName,address,remained));
+                        adapter.addItem(new Store(imgurl,storeName,address,remained,storeid));
                         recyclerView.setAdapter(adapter);
                     }
                 }

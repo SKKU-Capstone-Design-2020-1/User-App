@@ -25,10 +25,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.skku.userweb.R;
+import com.skku.userweb.util.GlobalVar;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,27 +51,28 @@ public class ContactFragment extends Fragment {
         private EditText edittext;
         private String edit;
         private String user_id;
-        private Integer count=1;
+        private String store;
+        private GlobalVar store_id;
         private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Bundle extra = getArguments();
-//        if(extra != null){
-//            user_id = extra.getString("userId");      //로그인 액티비티에서 보낸 userId를 변수에 저장
-//        }
+
 
         db.collection("contacts").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()){
-                        count+=1;
                     }
                 }
             }
         });
+
+//        GlobalVar storeId = (GlobalVar) getActivity().getApplication();
+//        store = storeId.getStoreId();
+//        Log.d("test",store);
     }
 
     @Override
@@ -80,9 +83,12 @@ public class ContactFragment extends Fragment {
         test = rootView.findViewById(R.id.test);
         spinner = rootView.findViewById(R.id.spinner2);
         userId = rootView.findViewById(R.id.fagment_contact_id);
-//        Bundle bundle = getArguments();
-//        String text = bundle.getString("userId");
-//        test.setText(text);
+        if (getArguments()!=null){
+                        store=getArguments().getString("storeId");
+                        Log.d("test",store);
+        }else{
+            Log.d("test","null");
+        }
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -95,6 +101,7 @@ public class ContactFragment extends Fragment {
         });
         button=rootView.findViewById(R.id.button3);
         edittext = rootView.findViewById(R.id.fagment_contact_inquire);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,17 +119,26 @@ public class ContactFragment extends Fragment {
                 }else{
                     edit = edittext.getText().toString();
                     selItem= (String)spinner.getSelectedItem();
-                    //test.setText(edit);
+
+//                    Bundle bundle = getArguments();
+//                    if(bundle != null){
+//                        store=bundle.getString("storeId");
+//                        Log.d("test",store);
+//                    }else{
+//                        Log.d("test","null");
+//                    }
+                    test.setText(store);
                     Map<String, Object> contact = new HashMap<>();
                     contact.put("contents",edit);
-                    contact.put("id",user_id);
+                    contact.put("user_id",user_id);
+                    contact.put("store_id",store_id);
                     contact.put("option",selItem);
-                    db.collection("contacts").document(Integer.toString(count)).set(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    contact.put("created_at", FieldValue.serverTimestamp());
+                    db.collection("contacts").document().set(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("test", "DocumentSnapshot successfully written!");
                             //Log.d("test", user_id);
-                            count+=1;
                             userId.setText(user_id);
                         }
                     }).addOnFailureListener(new OnFailureListener() {

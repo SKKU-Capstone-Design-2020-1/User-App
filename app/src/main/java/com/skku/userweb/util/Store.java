@@ -5,11 +5,13 @@ public class Store {
     private String storeName;
     private String storeAddress;
     private String remainedSeat;
-    public Store(String storeImage, String storeName, String storeAddress, String remainedSeat){
+    private String storeid;
+    public Store(String storeImage, String storeName, String storeAddress, String remainedSeat, String storeid){
         this.storeImage = storeImage;
         this.storeName = storeName;
         this.storeAddress = storeAddress;
         this.remainedSeat = remainedSeat;
+        this.storeid=storeid;
     }
     public String getStoreImage(){
         return this.storeImage;
@@ -22,5 +24,8 @@ public class Store {
     }
     public String getRemainedSeat(){
         return this.remainedSeat;
+    }
+    public String getStoreId(){
+        return this.storeid;
     }
 }
