@@ -31,12 +31,19 @@ import com.skku.userweb.fragment.ContactFragment;
 import com.skku.userweb.util.GlobalVar;
 import com.skku.userweb.util.Store;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+
+import static java.lang.Math.sqrt;
 
 
 public class SelectStoreActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     StoreListAdapter adapter;
+    public ArrayList arr1 = new ArrayList();
+    public ArrayList arr2 = new ArrayList();
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -56,29 +63,13 @@ public class SelectStoreActivity extends AppCompatActivity {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, View view, int position) {
                 Store item = adapter.getItem(position);
-                //Toast.makeText(getApplicationContext(),item.getStoreId(), Toast.LENGTH_SHORT).show();
                 GlobalVar storeId = (GlobalVar) getApplication();
                 storeId.setStoreId(item.getStoreId());
-                ContactFragment fragment = new ContactFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("storeId",item.getStoreId());
-                fragment.setArguments(bundle);
-                Toast.makeText(getApplicationContext(),storeId.getStoreId(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SelectStoreActivity.this,MainActivity.class);
                 startActivity(intent);
             }
         });
 
-        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if ( Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions( SelectStoreActivity.this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },0 );
-        }
-            Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
-            Toast.makeText(getApplicationContext(),"위도 : " + longitude + "\n" +
-                    "경도 : " + latitude, Toast.LENGTH_LONG).show();
         getData();
     }
     private void getData() {
@@ -89,7 +80,7 @@ public class SelectStoreActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()){
-                        Log.d("store data", document.getId() + " => " + document.getData());
+                        //Log.d("store data", document.getId() + " => " + document.getData());
                         String storeid = (String) document.getId();
                         String address= (String) document.getData().get("address");
                         String imgurl= (String) document.getData().get("img_url");
@@ -99,12 +90,34 @@ public class SelectStoreActivity extends AppCompatActivity {
                         Long num_users= (Long) document.getData().get("num_users");
                         Long num_seats= (Long) document.getData().get("num_seats");
                         String remained=num_users+"/"+num_seats;
+                        arr1.add(imgurl);
+                        arr1.add(storeName);
+                        arr1.add(address);
+                        arr1.add(remained);
+                        arr1.add(storeid);
+                        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                        if ( Build.VERSION.SDK_INT >= 23 &&
+                                ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+                            ActivityCompat.requestPermissions( SelectStoreActivity.this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },0 );
+                        }
+                        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        double userlongitude = location.getLongitude();
+                        double userlatitude = location.getLatitude();
+                        double res=sqrt((userlongitude-longtitude)*(userlongitude-longtitude)-(userlatitude-latitude)*(userlatitude-latitude));
+
+                        arr1.add(res);
+                        arr2.add(arr1);
+                        arr1.clear();
                         adapter.addItem(new Store(imgurl,storeName,address,remained,storeid));
                         recyclerView.setAdapter(adapter);
                     }
                 }
             }
         });
+
+//
+
+
     }
 
 }

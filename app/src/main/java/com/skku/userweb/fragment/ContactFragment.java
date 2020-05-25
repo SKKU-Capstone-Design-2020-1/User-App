@@ -3,10 +3,13 @@ package com.skku.userweb.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.skku.userweb.R;
+import com.skku.userweb.activity.MainActivity;
 import com.skku.userweb.util.GlobalVar;
 
 import java.util.HashMap;
@@ -44,15 +48,13 @@ import java.util.Map;
 
 public class ContactFragment extends Fragment {
         private TextView userId;
-        private TextView test;
         private Spinner spinner;
         private Button button;
         private String selItem;
         private EditText edittext;
         private String edit;
         private String user_id;
-        private String store;
-        private GlobalVar store_id;
+        private String store_id;
         private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
@@ -70,9 +72,11 @@ public class ContactFragment extends Fragment {
             }
         });
 
-//        GlobalVar storeId = (GlobalVar) getActivity().getApplication();
-//        store = storeId.getStoreId();
-//        Log.d("test",store);
+        GlobalVar storeId = (GlobalVar) getActivity().getApplication();
+        store_id = storeId.getStoreId();
+        GlobalVar userId = (GlobalVar) getActivity().getApplication();
+        user_id = userId.getUserId();
+        Log.d("test : onCreate ",store_id);
     }
 
     @Override
@@ -80,15 +84,9 @@ public class ContactFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_contact, container, false);
-        test = rootView.findViewById(R.id.test);
         spinner = rootView.findViewById(R.id.spinner2);
         userId = rootView.findViewById(R.id.fagment_contact_id);
-        if (getArguments()!=null){
-                        store=getArguments().getString("storeId");
-                        Log.d("test",store);
-        }else{
-            Log.d("test","null");
-        }
+        userId.setText(user_id);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
@@ -120,14 +118,6 @@ public class ContactFragment extends Fragment {
                     edit = edittext.getText().toString();
                     selItem= (String)spinner.getSelectedItem();
 
-//                    Bundle bundle = getArguments();
-//                    if(bundle != null){
-//                        store=bundle.getString("storeId");
-//                        Log.d("test",store);
-//                    }else{
-//                        Log.d("test","null");
-//                    }
-                    test.setText(store);
                     Map<String, Object> contact = new HashMap<>();
                     contact.put("contents",edit);
                     contact.put("user_id",user_id);
@@ -138,8 +128,17 @@ public class ContactFragment extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Log.d("test", "DocumentSnapshot successfully written!");
-                            //Log.d("test", user_id);
-                            userId.setText(user_id);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("Complete");
+                            builder.setMessage("We will try to accept");
+                            builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            });
+                            builder.show();
+
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
