@@ -30,6 +30,7 @@ import com.google.common.base.Objects;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -49,8 +50,11 @@ import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -65,16 +69,23 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
     private AbsentCountDownTimer absentCountDownTimer;
     private String[] descriptionData = {"Ready", "Go", "Using"};  //추후 예약전 상태도 입력 예정
     private StateProgressBar stateProgressBar;
-    private int gotime = 15;
-    private int usingtime = 10;
-    private int breaktime = 5;
+
     private boolean isAbsent = false;
     private ConstraintLayout absentLayout;
+
+    private int gotime = 15;
+    private int breaktime = 5;
+    // todo: store 정보, seat정보, seatid 정보 받아오는거 가능해지면 그걸로 초기화하기기
+    private String Store_key = "6j46BJioYNQS0TEYCRoY";
+    private String SeatGroup_key = "6A4g4AMrWfey8duKQeGp";
+    private String SeatId = "3";
+    // todo: beaconnumber를 map fragment에서 미리 만들어오기
+    private String beaconnumber;
 
     private static final String BeaconsEverywhere = "BeaconsEverywhere";
     private BeaconManager beaconManager;
     private static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 999;
-    private String beaconnumber;
+
 
     private Boolean realbeacon =false;
 
@@ -82,21 +93,6 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
 
     private TextView seatnum;
     private Button returnButton;
-
-//    private Timer timer = new Timer();
-
-//    private final Handler handler = new Handler() {
-//        public void handleMessage(Message msg) {
-//            //absentLayout.setVisibility(View.VISIBLE);
-//            absentCountDownTimer = new AbsentCountDownTimer(breaktime * 1000, 1000);
-//            absentCountDownTimer.start();
-//            isAbsent = true;
-//            beaconCheacker.cancel();
-//            Log.e("stop", "tt task stop");
-//        }
-//    };
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +102,7 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         /*Beacon permission*/
         if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            Log.i(BeaconsEverywhere, "location!!!!!!!!");
+            Log.i(BeaconsEverywhere, "location permission is needed");
             requestPermissions(
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSIONS_ACCESS_FINE_LOCATION
@@ -122,20 +118,6 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         Log.i(BeaconsEverywhere,"beacons bind success");
 
 
-
-//                }
-//        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_ACCESS_FINE_LOCATION);
-//        } else {
-//            beaconManager=BeaconManager.getInstanceForApplication(this);
-//            beaconManager.getBeaconParsers().add(new BeaconParser()
-//                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-//            //이건 알트비콘의 layout 입니다
-//            //2-3/4-19이런 것들은 다 byte position 을 의미합니
-//
-//            beaconManager.bind(this);
-//        }
 
     }
 
@@ -156,10 +138,6 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         Button stepSwitchButton = (Button) rootView.findViewById(R.id.fragment_status_stepSwitch_button);
         returnButton = (Button) rootView.findViewById(R.id.fragment_status_return_button);
 
-
-
-        //Log.d(lololo, "timer start!");
-
         stepSwitchButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -169,7 +147,8 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
                     seatnum.setVisibility(View.VISIBLE);
                     returnButton.setVisibility(View.VISIBLE);
                     stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-                    changeSeatStatus(1);
+                    changeSeatStatus(0,1);
+                    Log.i("status change", " 0 -> 1 (by temporal button)");
                 }
 
             }
@@ -183,6 +162,7 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
 
                     case 2:
                         myCountDownTimer.cancel();
+                        returnSeat(1);
                         break;
 
                     case 3:
@@ -191,9 +171,11 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
                             absentLayout.setVisibility(View.INVISIBLE);
                             isAbsent = false;
                         }
+                        returnSeat(2);
+                        Log.i("Return Seat","return seat by button");
                         break;
                 }
-                returnSeat();
+
             }
         });
 
@@ -211,6 +193,7 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
 
     @Override
     public void onBeaconServiceConnect() {
+        // todo: 임시 beacon id값을 글로벌 변수로 추후에 변경
         final Region region = new Region("myBeacons", Identifier.parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), null, null);
 
         beaconManager.addMonitorNotifier(new MonitorNotifier() {
@@ -309,12 +292,8 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         public void onTick(long millisUntilFinished) {
 
             if(realbeacon){
-
                 usingSeat();
-
             }
-            //int progress = (int) (millisUntilFinished/1000);
-            //progress = 시간이 지난 정도
 
             /*텍스트로 시간 보여주는 부분*/
             int seconds = (int) (millisUntilFinished / 1000) % 60;
@@ -351,8 +330,9 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         @Override
         public void onFinish() {
             if(stateProgressBar.getCurrentStateNumber() == 2){
-                // map화면으로 전환
-                returnSeat();
+                // todo: map화면으로 전환
+                returnSeat(1);
+                Log.i("Return Seat","return seat by go timeer");
             }
 
             myCountDownTimer.cancel();
@@ -368,16 +348,11 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         @Override
         public void onTick(long millisUntilFinished) {
             if(realbeacon){
-//                beaconCheacker = timerTaskMaker();
-//                timer.schedule(beaconCheacker, 0, 1000);
                 isAbsent = false;
                 absentCountDownTimer.cancel();
                 absentLayout.setVisibility(View.INVISIBLE);
                 tv_time.setText("Using time");
             }
-
-            int progress = (int) (millisUntilFinished/1000);
-            //progress = 시간이 지난 정도
 
             /*텍스트로 시간 보여주는 부분*/
             int seconds = (int) (millisUntilFinished / 1000) % 60;
@@ -418,113 +393,50 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
             absentCountDownTimer.cancel();
 
             // map화면으로 전환
-            returnSeat();
+            returnSeat(2);
+            Log.i("Return Seat","return seat by absent timer");
 
         }
     }
     private void getData(){
 
-        db.document("stores/eOc1iI2gvDUWy9LeA4hw").get().addOnCompleteListener(task -> {
+
+        // go time, break time
+        db.collection("stores")
+                .document(Store_key)
+                .get()
+                .addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
                 Object go = document.getData().get("go_time");
+
                 Log.d("status", "go_time: " + go);
                 gotime = Integer.parseInt(go.toString());
-                // usingtime
+
                 Object bre = document.getData().get("break_time");
                 Log.d("status", "break_time: " + bre);
                 breaktime = Integer.parseInt(bre.toString());
-                // seatnum
+
             }
         });
-        // 특정 자리 데이터 가져오기
-        db.document("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups/7PgDMSVxQmpQqAkOVekX").get().addOnCompleteListener(task -> {
+
+        // beacon id
+        db.collection("stores")
+                .document(Store_key)
+                .collection("seatGroups")
+                .document(SeatGroup_key)
+                .get().addOnCompleteListener(task -> {
             if(task.isSuccessful()){
                 DocumentSnapshot document = task.getResult();
-                Object beaconidList = document.getData().get("beacon_ids");
-                Log.d("status", "beaconid: " + beaconidList);
-                beaconnumber = beaconidList.toString();
-                // aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
-                int len_beaconnumber = beaconnumber.length();
-                beaconnumber = beaconnumber.substring(1, len_beaconnumber - 2);
+                ArrayList<String> beaconlist = (ArrayList<String>) document.getData().get("beacon_ids");
+                Log.d("status", "beacon ids: " + beaconlist);
+//                beaconnnn.add("sssssssssss");
+                Log.d("status", "beacon id 0: " + beaconlist.get(0));
+                beaconnumber = beaconlist.get(0).toString();
                 Log.d("status", "beacon number: " + beaconnumber);
 
             }
         });
-        // 특정 자리 데이터 가져오기
-//        db.document("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups/7PgDMSVxQmpQqAkOVekX/seats").get().addOnCompleteListener(task -> {
-//            if(task.isSuccessful()){
-//                DocumentSnapshot document = task.getResult();
-//                Object bbbb = document.getData();
-//                Log.d("status", "seat: " + bbbb);
-////                beaconnumber = beaconidList.toString();
-////                // aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
-////                int len_beaconnumber = beaconnumber.length();
-////                beaconnumber = beaconnumber.substring(1, len_beaconnumber - 2);
-////                Log.d("status", "beacon number: " + beaconnumber);
-//
-//            }
-//        });
-//        db.collection("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups")
-//                .whereEqualTo("map_id", "td130wl")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                Log.d("seatGroups", document.getId() + " => " + document.getData());
-//                            }
-//                        } else {
-//                            Log.d("status", "Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
-        DocumentReference docRef = db.collection("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups").document("7PgDMSVxQmpQqAkOVekX");
-
-        // Source can be CACHE, SERVER, or DEFAULT.
-        Source source = Source.CACHE;
-
-//        docRef.update(
-//                "seats.0.status", 1
-//        );
-
-        // Get the document, forcing the SDK to use the offline cache
-        docRef.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    // Document found in the offline cache
-                    DocumentSnapshot document = task.getResult();
-                    Log.d("ssssssssssssssss", "Cached document data: " + document.getData());
-                    Log.d("ssssssssssssssss", "seats: " + document.getData().get("seats"));
-                    Object aa = document.getData().get("seats");
-                    //D/ssssssssssssssss: Cached document data: {beacon_ids=[aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa], map_id=td130w1, seat_id=a5330mz, deg=0, x=293, y=232, seats=[{id=3, status=0}, {id=4, status=0}]}
-                    //D/ssssssssssssssss: seats: [{id=3, status=0}, {id=4, status=0}]
-
-
-                } else {
-                    Log.d("TAG", "Cached get failed: ", task.getException());
-                }
-            }
-        });
-
-//        CollectionReference citiesRef = db.collection("stores/eOc1iI2gvDUWy9LeA4hw");
-//        Query query = citiesRef.whereEqualTo("seatGroups", "7PgDMSVxQmpQqAkOVekX");
-//        db.collection("stores/eOc1iI2gvDUWy9LeA4hw/seatGroups/7PgDMSVxQmpQqAkOVekX/beacon_ids")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        Log.d("status", document.getId() + " => " + document.getData());
-//                    }
-//                }else{
-//                    Log.e("status", "Error getting documents: ", task.getException());
-//                }
-//            }
-//        });
 
     }
     private void usingSeat(){
@@ -533,9 +445,9 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE);
         //tv_time.setVisibility(View.INVISIBLE);
         tv_time.setText("Using time");
-        Log.d("tv", "tv!!!!!!!!!!!!!!!!!!!!!!!!");
         isAbsent = false;
-        changeSeatStatus(2);
+        changeSeatStatus(1,2);
+        Log.i("using","using start");
     }
 
     private void absentStart(){
@@ -547,17 +459,46 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
 
 
     }
-    private void returnSeat(){
+    private void returnSeat(int previous_Status){
         seatnum.setVisibility(View.INVISIBLE);
         returnButton.setVisibility(View.INVISIBLE);
         tv_time.setText("Reserve First");
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
 
-        changeSeatStatus(0);
+        changeSeatStatus(previous_Status,0);
     }
 
-    private void changeSeatStatus(int newStatus){
-        // todo: change data to newStatus
+    private void changeSeatStatus(int preStatus, int newStatus){
+
+        // DocumentReference docRef = db.collection("stores/6j46BJioYNQS0TEYCRoY/seatGroups").document("6A4g4AMrWfey8duKQeGp");
+        DocumentReference docRef = db.collection("stores")
+                .document(Store_key)
+                .collection("seatGroups")
+                .document(SeatGroup_key);
+
+
+        DocumentReference StoredocRef = db.collection("stores")
+                .document(Store_key);
+
+
+        Map<String, Object> findData = new HashMap<>();
+        findData.put("id", SeatId);
+        findData.put("status", preStatus);
+
+        docRef.update("seats", FieldValue.arrayRemove(findData));
+
+        Map<String, Object> newData = new HashMap<>();
+        newData.put("id", SeatId);
+        newData.put("status", newStatus);
+
+        docRef.update("seats", FieldValue.arrayUnion(newData));
+
+        if(preStatus == 0){
+            StoredocRef.update("num_users", FieldValue.increment(1));
+        }
+        else if(newStatus == 0){
+            StoredocRef.update("num_users", FieldValue.increment(-1));
+        }
 
     }
 
