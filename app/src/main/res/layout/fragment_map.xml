@@ -7,37 +7,31 @@
     tools:context=".fragment.MapFragment">
 
 
-    <TextView
-        android:id="@+id/fragment_map_remainSeat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Remained seat: 13/36"
-        android:textSize="@dimen/default_font_large"
+    <WebView
+        android:id="@+id/fragment_map_webview"
+        android:layout_width="match_parent"
+        android:layout_height="651dp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_map_quickReservation"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_map_sample_map"/>
+        app:layout_constraintVertical_bias="0.0">
+
+    </WebView>
 
     <Button
         android:id="@+id/fragment_map_quickReservation"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/primary_rounded_botton"
         android:text="Quick reservation"
         android:textColor="#FFFFFF"
         android:textSize="@dimen/default_font_normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/fragment_map_sample_map"
-        android:layout_width="match_parent"
-        android:layout_height="224dp"
-        android:src="@drawable/sample_map_image"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

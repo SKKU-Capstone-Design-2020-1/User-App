@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -20,6 +21,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+
+
+
+
     @BindView(R.id.main_view_pager)
     ViewPager2 viewPager;
     @BindView(R. id.main_tab_layout)
@@ -44,8 +49,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
                 tab.setText("Tab " + position);
+
             }
         }).attach();
+
+
     }
 
     @Override
