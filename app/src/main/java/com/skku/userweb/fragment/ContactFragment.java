@@ -76,7 +76,6 @@ public class ContactFragment extends Fragment {
         store_id = storeId.getStoreId();
         GlobalVar userId = (GlobalVar) getActivity().getApplication();
         user_id = userId.getUserId();
-        Log.d("test : onCreate ",store_id);
     }
 
     @Override
@@ -150,8 +149,5 @@ public class ContactFragment extends Fragment {
             }
         });
         return rootView;
-
     }
-
-
 }
