@@ -58,10 +58,12 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-
-public class StatusFragment extends Fragment implements BeaconConsumer {
+//public class StatusFragment extends Fragment implements BeaconConsumer {
+public class StatusFragment extends Fragment{
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private BeaconConsumer beaconConsumer;
 
     private TextView tv_time;
     private TextView ab_time;
@@ -97,7 +99,7 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getData();
+        getFirebaseData();
 
         /*Beacon permission*/
         if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -108,14 +110,18 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
                     MY_PERMISSIONS_ACCESS_FINE_LOCATION
             );
         }
-        beaconManager = BeaconManager.getInstanceForApplication(getActivity());
-        beaconManager.getBeaconParsers().add(new BeaconParser()
-                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-        //이건 알트비콘의 layout 입니다
-//            //2-3/4-19이런 것들은 다 byte position 을 의미합니다
+//        beaconManager = BeaconManager.getInstanceForApplication(getActivity());
+//        beaconManager.getBeaconParsers().add(new BeaconParser()
+//                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+//        //이건 알트비콘의 layout 입니다
+////            //2-3/4-19이런 것들은 다 byte position 을 의미합니다
+//
+//        beaconManager.bind(this);
+//        Log.i(BeaconsEverywhere,"beacons bind success");
 
-        beaconManager.bind(this);
-        Log.i(BeaconsEverywhere,"beacons bind success");
+
+
+
 
 
 
@@ -142,6 +148,8 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
             @Override
             public void onClick(View v) {
                 if(stateProgressBar.getCurrentStateNumber() == 1){
+
+                    bindBeaconConsumer();
                     myCountDownTimer = new MyCountDownTimer(gotime*1000, 1000);
                     myCountDownTimer.start();
                     seatnum.setVisibility(View.VISIBLE);
@@ -187,101 +195,107 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
     @Override
     public void onDestroy() {
 
-        beaconManager.unbind(this);
+        beaconManager.unbind(beaconConsumer);
         super.onDestroy();
     }
 
-    @Override
-    public void onBeaconServiceConnect() {
-        // todo: 임시 beacon id값을 글로벌 변수로 추후에 변경
-        final Region region = new Region("myBeacons", Identifier.parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), null, null);
-
-        beaconManager.addMonitorNotifier(new MonitorNotifier() {
-            @Override
-            public void didEnterRegion(Region region) {
-                try{
-                    Log.i(BeaconsEverywhere, "I just saw an beacon for the first time! Id1->"+region.getId1()
-                            +" id 2:"+region.getId2()+" id 3:"+region.getId3());
-
-                    //첫번째 아이디는 UUID
-                    //두번째 아이디는 major
-                    //세번째 아이디는 minor
-
-                    beaconManager.startRangingBeaconsInRegion(region);
-                } catch(RemoteException e){
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void didExitRegion(Region region) {
-                try {
-                    Log.d(BeaconsEverywhere, "did exit region");
-                    beaconManager.stopRangingBeaconsInRegion(region);
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void didDetermineStateForRegion(int i, Region region) {
-
-            }
-        });
-
-        beaconManager.addRangeNotifier(new RangeNotifier() {
-            @Override
-            public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
-                Log.i(BeaconsEverywhere,"beacons.size less then 0");
-                if(collection.size() > 0){
-                    Log.i(BeaconsEverywhere, "The first beacon I see is about " + collection.iterator().next().getDistance() + " meters away.");
-                    for(Beacon beacon: collection){
-                        if(beacon.getDistance() < 5.0){
-                            realbeacon = true;
-                        }
-                        else{
-                            realbeacon = false;
-                            Log.d(BeaconsEverywhere, "I see a beacon that in outside the 5.0 range");
-                            if(stateProgressBar.getCurrentStateNumber() == 3 && !isAbsent){
-                                isAbsent = true;
-                                absentStart();
-                            }
-                        }
-                    }
-                }else{
-                    realbeacon = false;
-                    Log.d(BeaconsEverywhere, "Where is beacon...");
-                    if(stateProgressBar.getCurrentStateNumber() == 3 && !isAbsent){
-                        isAbsent = true;
-                        absentStart();
-                    }
-                }
-            }
-        });
-
-        try{
-            beaconManager.startMonitoringBeaconsInRegion(region);
-        } catch (RemoteException e){
-            e.printStackTrace();
-        }
-
-
-    }
-
-    @Override
-    public Context getApplicationContext() {
-        return null;
-    }
-
-    @Override
-    public void unbindService(ServiceConnection serviceConnection) {
-
-    }
-
-    @Override
-    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
-        return false;
-    }
+//    @Override
+//    public void onBeaconServiceConnect() {
+//        // todo: 임시 beacon id값을 글로벌 변수로 추후에 변경
+//
+//
+//        Log.i("beaconid", "before beacon id: " + beaconnumber);
+//        final Region region = new Region("myBeacons", Identifier.parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"), null, null);
+//
+//        Log.i("beaconid", "after beacon id: " + beaconnumber);
+//
+//
+//        beaconManager.addMonitorNotifier(new MonitorNotifier() {
+//            @Override
+//            public void didEnterRegion(Region region) {
+//                try{
+//                    Log.i(BeaconsEverywhere, "I just saw an beacon for the first time! Id1->"+region.getId1()
+//                            +" id 2:"+region.getId2()+" id 3:"+region.getId3());
+//
+//                    //첫번째 아이디는 UUID
+//                    //두번째 아이디는 major
+//                    //세번째 아이디는 minor
+//
+//                    beaconManager.startRangingBeaconsInRegion(region);
+//                } catch(RemoteException e){
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void didExitRegion(Region region) {
+//                try {
+//                    Log.d(BeaconsEverywhere, "did exit region");
+//                    beaconManager.stopRangingBeaconsInRegion(region);
+//                } catch (RemoteException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void didDetermineStateForRegion(int i, Region region) {
+//
+//            }
+//        });
+//
+//        beaconManager.addRangeNotifier(new RangeNotifier() {
+//            @Override
+//            public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
+//                Log.i(BeaconsEverywhere,"beacons.size less then 0");
+//                if(collection.size() > 0){
+//                    Log.i(BeaconsEverywhere, "The first beacon I see is about " + collection.iterator().next().getDistance() + " meters away.");
+//                    for(Beacon beacon: collection){
+//                        if(beacon.getDistance() < 5.0){
+//                            realbeacon = true;
+//                        }
+//                        else{
+//                            realbeacon = false;
+//                            Log.d(BeaconsEverywhere, "I see a beacon that in outside the 5.0 range");
+//                            if(stateProgressBar.getCurrentStateNumber() == 3 && !isAbsent){
+//                                isAbsent = true;
+//                                absentStart();
+//                            }
+//                        }
+//                    }
+//                }else{
+//                    realbeacon = false;
+//                    Log.d(BeaconsEverywhere, "Where is beacon...");
+//                    if(stateProgressBar.getCurrentStateNumber() == 3 && !isAbsent){
+//                        isAbsent = true;
+//                        absentStart();
+//                    }
+//                }
+//            }
+//        });
+//
+//        try{
+//            beaconManager.startMonitoringBeaconsInRegion(region);
+//        } catch (RemoteException e){
+//            e.printStackTrace();
+//        }
+//
+//
+//    }
+//
+//    @Override
+//    public Context getApplicationContext() {
+//        return null;
+//    }
+//
+//    @Override
+//    public void unbindService(ServiceConnection serviceConnection) {
+//
+//    }
+//
+//    @Override
+//    public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
+//        return false;
+//    }
 
     public class MyCountDownTimer extends CountDownTimer{
         public MyCountDownTimer(long millisInFuture, long countDownInterval) {
@@ -398,7 +412,9 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
 
         }
     }
-    private void getData(){
+    private void getFirebaseData(){
+
+        Log.d("status", "getfirebase data start");
 
 
         // go time, break time
@@ -437,6 +453,8 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
 
             }
         });
+
+//        Log.d("beaconid", beaconnumber);
 
     }
     private void usingSeat(){
@@ -500,6 +518,112 @@ public class StatusFragment extends Fragment implements BeaconConsumer {
             StoredocRef.update("num_users", FieldValue.increment(-1));
         }
 
+    }
+
+    private void bindBeaconConsumer(){
+        beaconManager = BeaconManager.getInstanceForApplication(getActivity());
+        beaconManager.getBeaconParsers().add(new BeaconParser()
+                .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+        //이건 알트비콘의 layout 입니다
+//            //2-3/4-19이런 것들은 다 byte position 을 의미합니다
+
+        beaconConsumer = new BeaconConsumer() {
+            @Override
+            public void onBeaconServiceConnect() {
+                Log.i("beaconid", "before beacon id: " + beaconnumber);
+                final Region region = new Region("myBeacons", Identifier.parse(beaconnumber), null, null);
+
+                Log.i("beaconid", "after beacon id: " + beaconnumber);
+
+
+                beaconManager.addMonitorNotifier(new MonitorNotifier() {
+                    @Override
+                    public void didEnterRegion(Region region) {
+                        try{
+                            Log.i(BeaconsEverywhere, "I just saw an beacon for the first time! Id1->"+region.getId1()
+                                    +" id 2:"+region.getId2()+" id 3:"+region.getId3());
+
+                            //첫번째 아이디는 UUID
+                            //두번째 아이디는 major
+                            //세번째 아이디는 minor
+
+                            beaconManager.startRangingBeaconsInRegion(region);
+                        } catch(RemoteException e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void didExitRegion(Region region) {
+                        try {
+                            Log.d(BeaconsEverywhere, "did exit region");
+                            beaconManager.stopRangingBeaconsInRegion(region);
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void didDetermineStateForRegion(int i, Region region) {
+
+                    }
+                });
+
+                beaconManager.addRangeNotifier(new RangeNotifier() {
+                    @Override
+                    public void didRangeBeaconsInRegion(Collection<Beacon> collection, Region region) {
+                        Log.i(BeaconsEverywhere,"beacons.size less then 0");
+                        if(collection.size() > 0){
+                            Log.i(BeaconsEverywhere, "The first beacon I see is about " + collection.iterator().next().getDistance() + " meters away.");
+                            for(Beacon beacon: collection){
+                                if(beacon.getDistance() < 5.0){
+                                    realbeacon = true;
+                                }
+                                else{
+                                    realbeacon = false;
+                                    Log.d(BeaconsEverywhere, "I see a beacon that in outside the 5.0 range");
+                                    if(stateProgressBar.getCurrentStateNumber() == 3 && !isAbsent){
+                                        isAbsent = true;
+                                        absentStart();
+                                    }
+                                }
+                            }
+                        }else{
+                            realbeacon = false;
+                            Log.d(BeaconsEverywhere, "Where is beacon...");
+                            if(stateProgressBar.getCurrentStateNumber() == 3 && !isAbsent){
+                                isAbsent = true;
+                                absentStart();
+                            }
+                        }
+                    }
+                });
+
+                try{
+                    beaconManager.startMonitoringBeaconsInRegion(region);
+                } catch (RemoteException e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public Context getApplicationContext() {
+                return null;
+            }
+
+            @Override
+            public void unbindService(ServiceConnection serviceConnection) {
+
+            }
+
+            @Override
+            public boolean bindService(Intent intent, ServiceConnection serviceConnection, int i) {
+                return false;
+            }
+        };
+
+        beaconManager.bind(beaconConsumer);
+        Log.i(BeaconsEverywhere,"beacons bind success");
     }
 
 }

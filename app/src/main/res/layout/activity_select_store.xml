@@ -18,6 +18,15 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorPrimary" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="84dp"
+        android:layout_height="wrap_content"
+        android:text="Nearest"
+        android:textSize="@dimen/default_font_normal"
+        android:gravity="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
