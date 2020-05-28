@@ -29,23 +29,8 @@ public class UserFragment extends Fragment {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_user, container, false);
 
-//        Button editbutton = (Button) rootView.findViewById(R.id.fragment_user_editButton);
-//        Button logoutbutton = (Button) rootView.findViewById(R.id.fragment_user_logoutButton);
-//
-//        editbutton.setOnClickListener(this);
-//        logoutbutton.setOnClickListener(this);
 
         return rootView;
     }
 
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()){
-//            case R.id.fragment_user_editButton:
-//                //go to edit user activity
-//            case R.id.fragment_user_logoutButton:
-//                //logout
-//
-//        }
-//    }
 }
