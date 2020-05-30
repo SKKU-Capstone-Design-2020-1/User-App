@@ -64,8 +64,7 @@ public class SelectStoreActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         adapter = new StoreListAdapter(getApplicationContext());
         recyclerView.setAdapter(adapter);
-        GlobalVar userId = (GlobalVar) getApplication();
-        //Toast.makeText(getApplicationContext(),userId.getUserId(), Toast.LENGTH_SHORT).show();
+
         count=-1;
         adapter.setOnItemClickListener(new StoreListAdapter.OnItemClickListener() {
             @Override
@@ -75,6 +74,10 @@ public class SelectStoreActivity extends AppCompatActivity {
                 storeId.setStoreId(item.getStoreId());
                 GlobalVar storeName = (GlobalVar) getApplication();
                 storeName.setStoreName(item.getStoreName());
+                GlobalVar totalSeat = (GlobalVar) getApplication();
+                totalSeat.setTotalSeat(item.getRemainedSeat());
+                GlobalVar imgUrl = (GlobalVar) getApplication();
+                imgUrl.setImgUrl(item.getStoreImage());
                 Intent intent = new Intent(SelectStoreActivity.this,MainActivity.class);
                 startActivity(intent);
             }
@@ -128,12 +131,10 @@ public class SelectStoreActivity extends AppCompatActivity {
                         double res=sqrt((userlongitude-longtitude)*(userlongitude-longtitude)-(userlatitude-latitude)*(userlatitude-latitude));
                         count++;
                         arr[count]= new String[]{imgurl, storeName, address, remained, storeid, Double.toString(res)};
-
                     }
                 }
             }
         });
     }
-
 }
 
