@@ -65,7 +65,7 @@ public class SelectStoreActivity extends AppCompatActivity {
         adapter = new StoreListAdapter(getApplicationContext());
         recyclerView.setAdapter(adapter);
         GlobalVar userId = (GlobalVar) getApplication();
-        Toast.makeText(getApplicationContext(),userId.getUserId(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),userId.getUserId(), Toast.LENGTH_SHORT).show();
         count=-1;
         adapter.setOnItemClickListener(new StoreListAdapter.OnItemClickListener() {
             @Override
@@ -73,6 +73,8 @@ public class SelectStoreActivity extends AppCompatActivity {
                 Store item = adapter.getItem(position);
                 GlobalVar storeId = (GlobalVar) getApplication();
                 storeId.setStoreId(item.getStoreId());
+                GlobalVar storeName = (GlobalVar) getApplication();
+                storeName.setStoreName(item.getStoreName());
                 Intent intent = new Intent(SelectStoreActivity.this,MainActivity.class);
                 startActivity(intent);
             }

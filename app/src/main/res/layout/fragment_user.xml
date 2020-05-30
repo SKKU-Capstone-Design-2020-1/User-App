@@ -73,7 +73,7 @@
         android:id="@+id/fragment_user_dailyUsers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="daily users"
+        android:text="current users"
         android:textSize="@dimen/default_font_normal"
         app:layout_constraintEnd_toStartOf="@+id/fragment_user_num_dailyUsers"
         app:layout_constraintStart_toEndOf="@+id/fragment_user_middleDivider"
@@ -97,7 +97,7 @@
         android:id="@+id/fragment_user_num_dailyUsers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="155"
+        android:text="15"
         android:textColor="#000000"
         android:textSize="30dp"
         app:layout_constraintTop_toBottomOf="@+id/fragment_user_topDivider"
@@ -137,33 +137,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--    <Button-->
-<!--        android:id="@+id/fragment_user_editButton"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:background="@drawable/primary_rounded_botton"-->
-<!--        android:text="Edit user information"-->
-<!--        android:textColor="#FFFFFF"-->
-<!--        android:textSize="@dimen/default_font_normal"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/fragment_user_logoutButton"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/fragment_user_bottomDivider"-->
-<!--         />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/fragment_user_logoutButton"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:background="@drawable/primary_outlined_rounded_botton"-->
-<!--        android:text="Logout"-->
-<!--        android:textColor="@color/colorPrimary"-->
-<!--        android:textSize="@dimen/default_font_normal"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/fragment_user_editButton"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--    android:background="?attr/colorPrimary"-->
