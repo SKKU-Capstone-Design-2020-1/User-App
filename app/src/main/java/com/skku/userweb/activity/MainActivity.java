@@ -26,7 +26,13 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.skku.userweb.R;
 import com.skku.userweb.adapter.MainFragmentAdapter;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
+import java.io.IOException;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -36,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static final String TAG = "Temp";
-    public static String token;
+    public static String idToken;
 
 
     @BindView(R.id.main_view_pager)
@@ -57,10 +63,22 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        mUser.getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                           idToken = task.getResult().getToken();
+                            sendRegistrationToServer(idToken);
+                            // Send token to your backend via HTTPS
+                            // ...
+                        } else {
+                             task.getException();
+                        }
+                    }
+                });
 
-        //토큰 부분
-        SharedPreferences sharedPreferences = getSharedPreferences("sFile1",MODE_PRIVATE); //저장된 토큰을 불러오기 위한 셋팅
-        token = sharedPreferences.getString("Token1", token); //key값과 value값으로 구분된 저장된 토큰값을 불러옴
+
 
 
 
@@ -102,35 +120,35 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void getToken(){
-        //토큰값을 받아옴
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            return;
-                        }
+    private void sendRegistrationToServer(String token) {
+        // Add custom implementation, as needed.
 
-                        SharedPreferences sharedPreferences = getSharedPreferences("sFile1", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        token = task.getResult().getToken(); // 사용자가 입력한 저장할 데이터
-                        editor.putString("Token1",token); // key, value를 이용하여 저장하는 형태
-                        editor.commit();
+        // OKHTTP를 이용해 웹서버로 토큰값을 날려줌
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormEncodingBuilder()
+                .add("Token", token)
+                .build();
 
-                    }
-                });
+        Log.d("WebView", "!!body" + body);
+        //request
+        Request request = new Request.Builder()
+                .url("https://reserveseats.site/reserve?sid=6j46BJioYNQS0TEYCRoY&user_token="+token)
+                .post(body)
+                .build();
+
+        try {
+            Response response = client.newCall(request).execute();
+            String responseString = response.body().string();
+            response.body().close();
+            // do whatever you need to do with responseString
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
 
-        SharedPreferences sharedPreferences = getSharedPreferences("sFile1",MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("Token1",token); // key, value를 이용하여 저장하는 형태
-        editor.commit();
-    }
 
 
 }
