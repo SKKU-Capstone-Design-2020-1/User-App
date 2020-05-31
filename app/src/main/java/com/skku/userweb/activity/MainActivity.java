@@ -36,6 +36,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.skku.userweb.R;
 import com.skku.userweb.adapter.MainFragmentAdapter;
+import com.skku.userweb.util.GlobalVar;
 
 import java.util.Objects;
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Temp";
     public static String token;
+    private String store_Name;
 
 
     @BindView(R.id.main_view_pager)
@@ -59,9 +61,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // todo: change toolbar title to store name when login page give select store Activity as next page
+//        GlobalVar storeName = (GlobalVar) getApplication();
+//        store_Name = storeName.getStoreName();
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        // todo: change toolbar title to store name
         mToolbar.setTitle("Suwon-sungkyunkwan-library");    // store name
+//        mToolbar.setTitle(store_Name);    // store name
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
