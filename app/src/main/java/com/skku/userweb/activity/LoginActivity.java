@@ -144,6 +144,8 @@ public class LoginActivity extends AppCompatActivity {
                           //  Log.w(TAG, "signInWithEmail:failure", task.getException());
                             if(task.getException() !=null){
                                 Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_LONG).show();
+                                GlobalVar userId = (GlobalVar) getApplication();
+                                userId.setUserId(email);
                             }
 
                         }

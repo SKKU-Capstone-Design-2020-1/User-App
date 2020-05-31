@@ -4,15 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,22 +26,18 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.skku.userweb.R;
 import com.skku.userweb.adapter.MainFragmentAdapter;
-import com.skku.userweb.fragment.MapFragment;
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
+
 import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    private static final String TAG = "InsertTask";
+    private static final String TAG = "Temp";
+    public static String token;
 
-    public static String idToken;
 
     @BindView(R.id.main_view_pager)
     ViewPager2 viewPager;
@@ -50,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     MainFragmentAdapter fragmentAdapter;
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,24 +58,12 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
-        //token 받아오기
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        //토큰 부분
+        SharedPreferences sharedPreferences = getSharedPreferences("sFile1",MODE_PRIVATE); //저장된 토큰을 불러오기 위한 셋팅
+        token = sharedPreferences.getString("Token1", token); //key값과 value값으로 구분된 저장된 토큰값을 불러옴
 
-        mUser.getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            idToken = task.getResult().getToken();
-                          //token 서버로 전송
-                            sendRegistrationToServer(idToken);
 
-                        } else {
-                            // Handle error -> task.getException();
-                            task.getException();
 
-                        }
-                    }
-                });
 
 
         fragmentAdapter = new MainFragmentAdapter(this);
@@ -93,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }).attach();
+
 
     }
 
@@ -119,38 +102,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //서버로 token 전송
-    private void sendRegistrationToServer(String token) {
+    public void getToken(){
+        //토큰값을 받아옴
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
 
-        Log.d("WebView", "!!token  " + token);
-        // OKHTTP를 이용해 웹서버로 토큰값을 날려줌
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = new FormEncodingBuilder()
-        //RequestBody body = new FormBody.Builder()
-                .add("Token", token)
-                .build();
+                        SharedPreferences sharedPreferences = getSharedPreferences("sFile1", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        token = task.getResult().getToken(); // 사용자가 입력한 저장할 데이터
+                        editor.putString("Token1",token); // key, value를 이용하여 저장하는 형태
+                        editor.commit();
 
-        Log.d("WebView", "!!body  " +  body);
+                    }
+                });
+    }
 
-        //request
-        Request request = new Request.Builder()
-                .url("https://reserveseats.site/reserve?sid=6j46BJioYNQS0TEYCRoY")
-                .post(body)
-                .build();
+    @Override
+    protected void onStop() {
+        super.onStop();
 
-        Log.d("WebView", "!!Request" +  request);
-
-        try {
-            Response response = client.newCall(request).execute();
-            String responseString = response.body().string();
-
-            response.body().close();
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        SharedPreferences sharedPreferences = getSharedPreferences("sFile1",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("Token1",token); // key, value를 이용하여 저장하는 형태
+        editor.commit();
     }
 
 
