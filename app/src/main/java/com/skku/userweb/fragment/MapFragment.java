@@ -3,6 +3,7 @@ package com.skku.userweb.fragment;
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ import com.skku.userweb.activity.MainActivity;
 
 import java.util.zip.Inflater;
 
-import static com.skku.userweb.activity.MainActivity.token;
+import static com.skku.userweb.activity.MainActivity.idToken;
 
 public class MapFragment extends Fragment {
 
@@ -94,7 +95,7 @@ public class MapFragment extends Fragment {
 
     }
 
-    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

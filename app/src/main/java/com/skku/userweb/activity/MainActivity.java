@@ -37,6 +37,11 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.skku.userweb.R;
 import com.skku.userweb.adapter.MainFragmentAdapter;
 import com.skku.userweb.util.GlobalVar;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 
 import java.util.Objects;
 
@@ -153,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         // Add custom implementation, as needed.
 
         // OKHTTP를 이용해 웹서버로 토큰값을 날려줌
+
         OkHttpClient client = new OkHttpClient();
         RequestBody body = new FormEncodingBuilder()
                 .add("Token", token)
