@@ -33,6 +33,8 @@ import static com.skku.userweb.activity.MainActivity.token;
 
 public class MapFragment extends Fragment {
 
+    private String map_url_value;
+    private String[] after_map_url_value;
 
 
     //private String token;
@@ -52,10 +54,45 @@ public class MapFragment extends Fragment {
         webview.setWebViewClient(new WebViewClient());
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-       // webview.loadUrl("https://reserveseats.site/reserve?sid=6j46BJioYNQS0TEYCRoY&user_token=asd");
-         webview.loadUrl("https://reserveseats.site/reserve?sid=6j46BJioYNQS0TEYCRoY&user_token="+ MainActivity.token);
+
+        // webview.loadUrl("https://reserveseats.site/reserve?sid=6j46BJioYNQS0TEYCRoY");
+
+        webview.loadUrl("https://reserveseats.site/reserve?sid=6j46BJioYNQS0TEYCRoY&user_token="+ MainActivity.idToken);
+
+        Log.d("WebView", "Before" + webview.getUrl());
+        webview.loadUrl( "javascript:window.location.reload( true )" );
+
+
+        //페이지가 바뀐 후 링크 받아오기
+        new CountDownTimer(10000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+            @Override
+            public void onFinish() {
+                // counttime.setText("Finished");
+                Log.d("WebView", "After" + webview.getUrl());
+                //받아온 url
+                map_url_value=webview.getUrl();
+
+                //받은 url 필요 값 추출하기
+                if(map_url_value!=null){
+                    //url 분리
+                    after_map_url_value=map_url_value.split("&");
+                    for(int i=0;i<after_map_url_value.length;i++) {
+                        //System.out.println(after_map_url_value[i]);
+                        Log.d("WebView", "!!url" + after_map_url_value[i]);
+                    }
+                }
+
+            }
+        }.start();
+
 
         return view;
+
+    }
 
     }
 
@@ -65,30 +102,6 @@ public class MapFragment extends Fragment {
 
 
     }
-
-  /*  
-    Task<GetTokenResult> mUser = FirebaseAuth.getInstance()
-            .getCurrentUser().getIdToken(true)
-            .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                @Override
-                public void onComplete(@NonNull Task<GetTokenResult> task) {
-                    if (task.isSuccessful()) {
-                        String idToken = task.getResult().getToken();
-                        // Send token to your backend via HTTPS
-                        // ...
-                        Log.d("FragmentCreate", "Token found from thread1 after expiry " + task.getResult().getToken());
-                        //  Toast.makeText(MainActivity.this, " successful", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    //Toast.makeText(MainActivity.this, " ful", Toast.LENGTH_LONG).show();
-                    Log.d("FragmentCreate","Token failed from main thread single "+e.toString());
-                }
-            });
-*/
-
 
 
 
