@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_LONG).show();
                             GlobalVar userId = (GlobalVar) getApplication();
                             userId.setUserId(email);
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), SelectStoreActivity.class));
                         }
                         else {
 
