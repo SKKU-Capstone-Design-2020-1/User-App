@@ -2,12 +2,19 @@ package com.skku.userweb.util;
 
 import android.app.Application;
 
+import com.google.firebase.firestore.DocumentReference;
+
 public class GlobalVar extends Application {
     private String imgUrl;
     private String userId;
     private String storeId;
     private String storeName;
     private String totalSeat;
+    private String map_id;
+    private String seat_id;
+    private String selected_seat;
+    private String seatGroupId;
+    private String beaconId;
     public String getImgUrl(){
         return imgUrl;
     }
@@ -37,6 +44,37 @@ public class GlobalVar extends Application {
     }
     public void setTotalSeat(String totalSeat){
         this.totalSeat = totalSeat;
+    }
+
+    public String getMap_id(){
+        return map_id;
+    }
+    public void setMap_id(String map_id){
+        this.map_id = map_id;
+    }
+    public String getSeat_id(){
+        return seat_id;
+    }
+    public void setSeat_id(String seat_id){
+        this.seat_id = seat_id;
+    }
+    public String getSelected_seat(){
+        return selected_seat;
+    }
+    public void setSelected_seat(String selected_seat){
+        this.selected_seat = selected_seat;
+    }
+    public String getSeatGroupId(){
+        return seatGroupId;
+    }
+    public void setSeatGroupId(String seatGroupId){
+        this.seatGroupId = seatGroupId;
+    }
+    public String getBeaconId(){
+        return beaconId;
+    }
+    public void setBeaconId(String beaconId){
+        this.beaconId = beaconId;
     }
 
 }

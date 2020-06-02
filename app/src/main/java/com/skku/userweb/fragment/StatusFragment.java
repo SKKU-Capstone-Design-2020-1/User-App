@@ -39,6 +39,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.kofigyan.stateprogressbar.StateProgressBar;
 import com.skku.userweb.R;
+import com.skku.userweb.activity.MainActivity;
+import com.skku.userweb.util.GlobalVar;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconConsumer;
@@ -78,9 +80,12 @@ public class StatusFragment extends Fragment{
     private int gotime = 15;
     private int breaktime = 5;
     // todo: store 정보, seat정보, seatid 정보 받아오는거 가능해지면 그걸로 초기화하기기
-    private String Store_key = "6j46BJioYNQS0TEYCRoY";
-    private String SeatGroup_key = "6A4g4AMrWfey8duKQeGp";
-    private String SeatId = "3";
+//    private String Store_key = "6j46BJioYNQS0TEYCRoY";
+//    private String SeatGroup_key = "6A4g4AMrWfey8duKQeGp";
+//    private String Selected_seat = "3";
+    private String Store_key;
+    private String SeatGroup_key;
+    private String Selected_seat;
     // todo: beaconnumber를 map fragment에서 미리 만들어오기
     private String beaconnumber;
 
@@ -97,6 +102,10 @@ public class StatusFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        GlobalVar storeId = (GlobalVar) getActivity().getApplication();
+        Store_key = storeId.getStoreId();
+
+
         getFirebaseData();
 
         /*Beacon permission*/
@@ -125,27 +134,27 @@ public class StatusFragment extends Fragment{
         seatnum = (TextView) rootView.findViewById(R.id.fragment_status_seatNum_textView);
         absentLayout = (ConstraintLayout) rootView.findViewById(R.id.fragment_status_absent_constraintlayout);
         
-        Button stepSwitchButton = (Button) rootView.findViewById(R.id.fragment_status_stepSwitch_button);
+//        Button stepSwitchButton = (Button) rootView.findViewById(R.id.fragment_status_stepSwitch_button);
         returnButton = (Button) rootView.findViewById(R.id.fragment_status_return_button);
 
-        stepSwitchButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                if(stateProgressBar.getCurrentStateNumber() == 1){
-
-                    bindBeaconConsumer();
-                    myCountDownTimer = new MyCountDownTimer(gotime*1000, 1000);
-                    myCountDownTimer.start();
-                    seatnum.setText("Seat Number: "+ SeatId);
-                    seatnum.setVisibility(View.VISIBLE);
-                    returnButton.setVisibility(View.VISIBLE);
-                    stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-                    changeSeatStatus(0,1);
-                    Log.i("status change", " 0 -> 1 (by temporal button)");
-                }
-
-            }
-        });
+//        stepSwitchButton.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                if(stateProgressBar.getCurrentStateNumber() == 1){
+//
+//                    bindBeaconConsumer();
+//                    myCountDownTimer = new MyCountDownTimer(gotime*1000, 1000);
+//                    myCountDownTimer.start();
+//                    seatnum.setText("Seat Number: "+ Selected_seat);
+//                    seatnum.setVisibility(View.VISIBLE);
+//                    returnButton.setVisibility(View.VISIBLE);
+//                    stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+//                    changeSeatStatus(0,1);
+//                    Log.i("status change", " 0 -> 1 (by temporal button)");
+//                }
+//
+//            }
+//        });
 
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +193,34 @@ public class StatusFragment extends Fragment{
         super.onDestroy();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(stateProgressBar.getCurrentStateNumber() == 1){
+            if(((MainActivity)getActivity()).is_reserve){
+//                private String SeatGroup_key;
+//                private String SeatId;
+                GlobalVar BeaconNumber = (GlobalVar) getActivity().getApplication();
+                beaconnumber = BeaconNumber.getBeaconId();
+                GlobalVar SelectedSeat = (GlobalVar) getActivity().getApplication();
+                Selected_seat = SelectedSeat.getSelected_seat();
+                GlobalVar SeatGroupKey = (GlobalVar) getActivity().getApplication();
+                SeatGroup_key = SeatGroupKey.getSeatGroupId();
+
+
+                bindBeaconConsumer();
+                myCountDownTimer = new MyCountDownTimer(gotime*1000, 1000);
+                myCountDownTimer.start();
+                seatnum.setText("Seat Number: "+ Selected_seat);
+                seatnum.setVisibility(View.VISIBLE);
+                returnButton.setVisibility(View.VISIBLE);
+                stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
+//                changeSeatStatus(0,1);
+//                Log.i("status change", " 0 -> 1 (by temporal button)");
+//                aaa.setText("success");
+            }
+        }
+    }
 
     public class MyCountDownTimer extends CountDownTimer{
         public MyCountDownTimer(long millisInFuture, long countDownInterval) {
@@ -325,22 +362,22 @@ public class StatusFragment extends Fragment{
         });
 
         // beacon id
-        db.collection("stores")
-                .document(Store_key)
-                .collection("seatGroups")
-                .document(SeatGroup_key)
-                .get().addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                DocumentSnapshot document = task.getResult();
-                ArrayList<String> beaconlist = (ArrayList<String>) document.getData().get("beacon_ids");
-                Log.d("status", "beacon ids: " + beaconlist);
-//                beaconnnn.add("sssssssssss");
-                Log.d("status", "beacon id 0: " + beaconlist.get(0));
-                beaconnumber = beaconlist.get(0).toString();
-                Log.d("status", "beacon number: " + beaconnumber);
-
-            }
-        });
+//        db.collection("stores")
+//                .document(Store_key)
+//                .collection("seatGroups")
+//                .document(SeatGroup_key)
+//                .get().addOnCompleteListener(task -> {
+//            if(task.isSuccessful()){
+//                DocumentSnapshot document = task.getResult();
+//                ArrayList<String> beaconlist = (ArrayList<String>) document.getData().get("beacon_ids");
+//                Log.d("status", "beacon ids: " + beaconlist);
+////                beaconnnn.add("sssssssssss");
+//                Log.d("status", "beacon id 0: " + beaconlist.get(0));
+//                beaconnumber = beaconlist.get(0).toString();
+//                Log.d("status", "beacon number: " + beaconnumber);
+//
+//            }
+//        });
 
 //        Log.d("beaconid", beaconnumber);
 
@@ -372,7 +409,7 @@ public class StatusFragment extends Fragment{
         stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE);
 
         changeSeatStatus(previous_Status,0);
-
+        ((MainActivity)getActivity()).is_reserve = false;
         beaconManager.unbind(beaconConsumer);
     }
 
@@ -390,13 +427,13 @@ public class StatusFragment extends Fragment{
 
 
         Map<String, Object> findData = new HashMap<>();
-        findData.put("id", SeatId);
+        findData.put("id", Selected_seat);
         findData.put("status", preStatus);
 
         docRef.update("seats", FieldValue.arrayRemove(findData));
 
         Map<String, Object> newData = new HashMap<>();
-        newData.put("id", SeatId);
+        newData.put("id", Selected_seat);
         newData.put("status", newStatus);
 
         docRef.update("seats", FieldValue.arrayUnion(newData));
@@ -420,11 +457,7 @@ public class StatusFragment extends Fragment{
         beaconConsumer = new BeaconConsumer() {
             @Override
             public void onBeaconServiceConnect() {
-                Log.i("beaconid", "before beacon id: " + beaconnumber);
                 final Region region = new Region("myBeacons", Identifier.parse(beaconnumber), null, null);
-
-                Log.i("beaconid", "after beacon id: " + beaconnumber);
-
 
                 beaconManager.addMonitorNotifier(new MonitorNotifier() {
                     @Override

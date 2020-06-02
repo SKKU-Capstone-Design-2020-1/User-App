@@ -53,11 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Temp";
     public static String idToken;
-    private String store_Name;
+    public boolean is_reserve;
+    String store_Name;
 
 
     @BindView(R.id.main_view_pager)
-    ViewPager2 viewPager;
+    public ViewPager2 viewPager;
     @BindView(R.id.main_tab_layout)
     TabLayout tabLayout;
     MainFragmentAdapter fragmentAdapter;
@@ -67,32 +68,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         // todo: change toolbar title to store name when login page give select store Activity as next page
-//        GlobalVar storeName = (GlobalVar) getApplication();
-//        store_Name = storeName.getStoreName();
+        GlobalVar storeName = (GlobalVar) getApplication();
+        store_Name = storeName.getStoreName();
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         // todo: change toolbar title to store name
-        mToolbar.setTitle("Suwon-sungkyunkwan-library");    // store name
-//        mToolbar.setTitle(store_Name);    // store name
+//        mToolbar.setTitle("Suwon-sungkyunkwan-library");    // store name
+        mToolbar.setTitle(store_Name);    // store name
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         ButterKnife.bind(this);
 
-        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-        mUser.getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if (task.isSuccessful()) {
-                            idToken = task.getResult().getToken();
-                            sendRegistrationToServer(idToken);
-                            // Send token to your backend via HTTPS
-                            // ...
-                        } else {
-                            task.getException();
-                        }
-                    }
-                });
 
 
 
