@@ -148,6 +148,7 @@ public class MapFragment extends Fragment {
 
                     }
                     else{
+                        webview.loadUrl("https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken);
                         Log.e("Error", "fail to reserve");
                     }
 
@@ -206,6 +207,7 @@ public class MapFragment extends Fragment {
                             Log.d("sssssss", "success to change");
                         }
                         else{
+                            webview.loadUrl("https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken);
                             Log.d("Error", "Error getting documents: ", task.getException());
                         }
                     }
