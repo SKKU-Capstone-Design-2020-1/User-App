@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+/*
     private void sendRegistrationToServer(String token) {
         // Add custom implementation, as needed.
 
@@ -169,6 +169,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+*/
 
 }
