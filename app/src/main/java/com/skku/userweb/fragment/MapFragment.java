@@ -206,7 +206,7 @@ public class MapFragment extends Fragment {
                         }
                         else{
 
-                            
+
                             webview.loadUrl("https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken);
                             Log.d("Error", "Error getting documents: ", task.getException());
                         }
