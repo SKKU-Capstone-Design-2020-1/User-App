@@ -49,6 +49,7 @@ public class MapFragment extends Fragment {
     private String seat_id;
     private Long num_users;
     private Long num_seats;
+    private WebView webview;
 
     private boolean is_success = false;
 
@@ -72,7 +73,7 @@ public class MapFragment extends Fragment {
 
 
         View view=inflater.inflate(R.layout.fragment_map,container,false);
-        WebView webview=(WebView)view.findViewById(R.id.fragment_map_webview);
+        webview=(WebView)view.findViewById(R.id.fragment_map_webview);
 //        webview.s
         webview.setWebViewClient(new WebViewClient());
         webview.getSettings().setJavaScriptEnabled(true);
