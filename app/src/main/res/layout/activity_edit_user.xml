@@ -30,6 +30,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_toolbar">
 
+        <TextView
+            android:id="@+id/activity_EditUser_email"
+            android:layout_width="71dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="28dp"
+            android:text="Email"
+            app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_name"
+            app:layout_constraintStart_toStartOf="@+id/activity_EditUser_constraintLayout1"
+            app:layout_constraintTop_toTopOf="@+id/activity_EditUser_constraintLayout1"
+            app:layout_constraintVertical_bias="0.445" />
 
         <TextView
             android:id="@+id/activity_EditUser_name"
@@ -46,33 +56,36 @@
             android:id="@+id/activity_EditUser_phone"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="28dp"
             android:text="Phone"
             app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_divider2"
             app:layout_constraintStart_toStartOf="@+id/activity_EditUser_constraintLayout1"
-            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider3" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider3"
+            app:layout_constraintVertical_bias="0.494" />
 
         <TextView
             android:id="@+id/activity_EditUser_password"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="28dp"
             android:text="password"
             android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_divider3"
             app:layout_constraintStart_toStartOf="@+id/activity_EditUser_constraintLayout1"
-            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider4" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider4"
+            app:layout_constraintVertical_bias="0.494" />
 
         <TextView
             android:id="@+id/activity_EditUser_confirm"
             android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="28dp"
             android:text="confirm"
             android:textColor="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="@+id/activity_EditUser_constraintLayout1"
             app:layout_constraintStart_toStartOf="@+id/activity_EditUser_constraintLayout1"
-            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider4" />
+            app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider4"
+            app:layout_constraintVertical_bias="0.489" />
 
         <View
             android:id="@+id/activity_EditUser_divider1"
@@ -115,6 +128,19 @@
             app:layout_constraintStart_toStartOf="@+id/activity_EditUser_constraintLayout1"
             app:layout_constraintTop_toBottomOf="@+id/activity_EditUser_divider3" />
 
+        <EditText
+            android:id="@+id/activity_EditUser_editEmail"
+            android:layout_width="295dp"
+            android:layout_height="69dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+
+            app:layout_constraintBottom_toTopOf="@+id/activity_EditUser_editName"
+            app:layout_constraintEnd_toEndOf="@+id/activity_EditUser_constraintLayout1"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/activity_EditUser_name"
+            app:layout_constraintTop_toTopOf="@+id/activity_EditUser_constraintLayout1"
+            app:layout_constraintVertical_bias="1.0" />
 
         <EditText
             android:id="@+id/activity_EditUser_editName"

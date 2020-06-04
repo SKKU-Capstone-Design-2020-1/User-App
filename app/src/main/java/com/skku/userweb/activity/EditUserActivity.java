@@ -41,7 +41,7 @@ public class EditUserActivity extends AppCompatActivity {
 
 
     private static final String TAG = "EditeActivity";
-    private EditText editTextPassword, editTextPasswordConfirm, editTextUsername, editTextPhone;
+    private EditText editTextEmail, editTextPassword, editTextPasswordConfirm, editTextUsername, editTextPhone;
     private FirebaseAuth firebaseAuth;
     String userID;
 
@@ -56,6 +56,7 @@ public class EditUserActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
 
+        editTextEmail = findViewById(R.id.activity_EditUser_editEmail);
         editTextPassword = findViewById(R.id.activity_EditUser_editPassword);
         editTextPasswordConfirm = findViewById(R.id.activity_EditUser_editconfirm);
         editTextUsername = findViewById(R.id.activity_EditUser_editName);
@@ -85,10 +86,12 @@ public class EditUserActivity extends AppCompatActivity {
                 return;
             }
             if (documentSnapshot.exists()) {
-                String username1 = documentSnapshot.getString("username");
-                String phone1 = documentSnapshot.getString("phone");
-                editTextUsername.setText(username1);
-                editTextPhone.setText(phone1);
+              //  String username1 = documentSnapshot.getString("username");
+              //  String phone1 = documentSnapshot.getString("phone");
+                String email1 = documentSnapshot.getString("email");
+                editTextEmail.setText(email1);
+                //editTextUsername.setText(username1);
+                //editTextPhone.setText(phone1);
             }
         });
 
@@ -116,9 +119,22 @@ public class EditUserActivity extends AppCompatActivity {
 
    public void  editdata(View view) {
 
+       String phone=editTextPhone.getText().toString().trim();
+       String username=editTextUsername.getText().toString().trim();
        String password = editTextPassword.getText().toString().trim();
        String password_confirm = editTextPasswordConfirm.getText().toString().trim();
 
+       if (username.isEmpty()) {
+           editTextUsername.setError("Name requried");
+           editTextUsername.requestFocus();
+           return;
+       }
+
+       if (phone.isEmpty()) {
+           editTextPhone.setError("Phone requried");
+           editTextPhone.requestFocus();
+           return;
+       }
 
        if (password.isEmpty()) {
            editTextPassword.setError("Enter password");
@@ -147,6 +163,8 @@ public class EditUserActivity extends AppCompatActivity {
 
        Map<String, Object> user = new HashMap<>();
         user.put("password", password);
+        user.put("phone",phone);
+       user.put("username",username);
 
         userinfo.update(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
