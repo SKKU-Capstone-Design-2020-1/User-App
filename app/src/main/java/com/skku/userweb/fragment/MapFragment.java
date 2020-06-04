@@ -49,8 +49,14 @@ public class MapFragment extends Fragment {
     private String seat_id;
     private Long num_users;
     private Long num_seats;
-    private WebView webview;
+   // private WebView webview;
 
+    //edit 
+    public static View view;
+    public static String Url;
+    public static WebView webview;
+    
+    
     private boolean is_success = false;
 
     @Override
@@ -87,11 +93,9 @@ public class MapFragment extends Fragment {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
                             idToken = task.getResult().getToken();
-
-                            webview.loadUrl("https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken);
-//                            sendRegistrationToServer(idToken);
-                            // Send token to your backend via HTTPS
-                            // ...
+                            Url= "https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken;
+                            webview.loadUrl(Url);
+                                                                             
                         } else {
                             task.getException();
                         }
@@ -99,7 +103,7 @@ public class MapFragment extends Fragment {
                 });
 
 
-        Log.d("WebView", "Before" + webview.getUrl());
+        //Log.d("WebView", "Before" + webview.getUrl());
         webview.loadUrl( "javascript:window.location.reload( true )" );
 
         //페이지가 바뀐 후 링크 받아오기
@@ -149,11 +153,9 @@ public class MapFragment extends Fragment {
 
                     }
                     else{
-                        webview.loadUrl("https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken);
+                      
                         Log.e("Error", "fail to reserve");
                     }
-
-
 
                 }
 
@@ -208,7 +210,7 @@ public class MapFragment extends Fragment {
                             Log.d("sssssss", "success to change");
                         }
                         else{
-                            webview.loadUrl("https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken);
+                           
                             Log.d("Error", "Error getting documents: ", task.getException());
                         }
                     }
