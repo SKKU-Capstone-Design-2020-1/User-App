@@ -25,6 +25,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -41,6 +44,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 
 import static java.lang.Math.sqrt;
 
@@ -50,8 +54,10 @@ public class UserFragment extends Fragment {
     private TextView store_name;
     private TextView totalseat;
     private TextView currentuser;
+    private TextView email_text;
     private String store_id;
     private String store_Name;
+    private String owner_email;
     private String remained_seat;
     private String img_url;
     private ImageView imgView;
@@ -70,10 +76,13 @@ public class UserFragment extends Fragment {
         store_name = rootView.findViewById(R.id.fragment_user_storename);
         totalseat = rootView.findViewById(R.id.fragment_user_num_totalSeat);
         currentuser = rootView.findViewById(R.id.fragment_user_num_dailyUsers);
+        email_text = rootView.findViewById(R.id.fragment_user_email);
         GlobalVar storeId = (GlobalVar) getActivity().getApplication();
         store_id = storeId.getStoreId();
         GlobalVar storeName = (GlobalVar) getActivity().getApplication();
         store_Name = storeName.getStoreName();
+        GlobalVar ownerEmail = (GlobalVar) getActivity().getApplication();
+        owner_email = ownerEmail.getOwnerEmail();
 
         GlobalVar imgUrl = (GlobalVar) getActivity().getApplication();
         img_url = imgUrl.getImgUrl();
@@ -107,11 +116,9 @@ public class UserFragment extends Fragment {
 //        editbutton.setOnClickListener(this);
 //        logoutbutton.setOnClickListener(this);
 
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         DocumentReference docRef = db.collection("stores").document(store_id);
         Source source = Source.CACHE;
         docRef.get(source).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -120,10 +127,8 @@ public class UserFragment extends Fragment {
                 if (task.isSuccessful()) {
                     // Document found in the offline cache
                     DocumentSnapshot document = task.getResult();
-                    Log.d("test", "Cached document data: " + document.getData());
                     Long num_users= (Long) document.getData().get("num_users");
                     Long num_seats= (Long) document.getData().get("num_seats");
-                    Log.d("test", num_users+"/"+num_seats);
                     totalseat.setText(String.valueOf(num_seats));
                     currentuser.setText(String.valueOf(num_users));
                 } else {
@@ -131,6 +136,10 @@ public class UserFragment extends Fragment {
                 }
             }
         });
+        email_text.setText(owner_email);
+
+
+
         return rootView;
     }
 

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -44,32 +43,32 @@ import static com.skku.userweb.activity.MainActivity.idToken;
 public class MapFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    public static  String map_url_value;
-    private String map_url;
+    private String map_url_value;
     private String[] after_map_url_value;
+    private String store_id;
     private String seat_id;
     private Long num_users;
     private Long num_seats;
-    private boolean is_success = false;
+   // private WebView webview;
 
+    //edit 
     public static View view;
     public static String Url;
     public static WebView webview;
-    public  static String store_id;
-
-
+    
+    
+    private boolean is_success = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GlobalVar storeId = (GlobalVar) getActivity().getApplication();
         store_id = storeId.getStoreId();
-
     }
 
+    //private String token;
+
     public MapFragment() {
-
-
     }
 
     @SuppressLint("WrongViewCast")
@@ -78,13 +77,15 @@ public class MapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
 
-        view=inflater.inflate(R.layout.fragment_map,container,false);
+
+        View view=inflater.inflate(R.layout.fragment_map,container,false);
         webview=(WebView)view.findViewById(R.id.fragment_map_webview);
+//        webview.s
         webview.setWebViewClient(new WebViewClient());
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
-
+        // webview.loadUrl("https://reserveseats.site/reserve?sid=6j46BJioYNQS0TEYCRoY");
 
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
         mUser.getIdToken(true)
@@ -93,8 +94,8 @@ public class MapFragment extends Fragment {
                         if (task.isSuccessful()) {
                             idToken = task.getResult().getToken();
                             Url= "https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken;
-                           webview.loadUrl(Url);
-
+                            webview.loadUrl(Url);
+                                                                             
                         } else {
                             task.getException();
                         }
@@ -102,64 +103,10 @@ public class MapFragment extends Fragment {
                 });
 
 
+        //Log.d("WebView", "Before" + webview.getUrl());
+        webview.loadUrl( "javascript:window.location.reload( true )" );
 
 
-
-       //webview.loadUrl( "javascript:window.location.reload( true )" );
-
-        //페이지가 바뀐 후 링크 받아오기
-
-        new CountDownTimer(20000,2000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-
-            }
-            @Override
-            public void onFinish() {
-
-                //받아온 url
-                map_url_value=webview.getUrl();
-
-
-                //받은 url 필요 값 추출하기
-                if(map_url_value!=null){
-                    //url 분리
-                    after_map_url_value=map_url_value.split("&");
-                    for(int i=0;i<after_map_url_value.length;i++) {
-                        //System.out.println(after_map_url_value[i]);
-                        Log.d("WebView", "!!url " + after_map_url_value[i]);
-                    }
-                    String[] get_value;
-                    // success
-                    get_value = after_map_url_value[0].split("=");
-                    is_success = get_value[1].equals("success");
-
-                    if(is_success){
-                        // map_id
-                        get_value = after_map_url_value[1].split("=");
-                        GlobalVar mapId = (GlobalVar) getActivity().getApplication();
-                        mapId.setMap_id(get_value[1]);
-                        // seat_id
-                        get_value = after_map_url_value[2].split("=");
-                        GlobalVar seatId = (GlobalVar) getActivity().getApplication();
-                        seatId.setSeat_id(get_value[1]);
-                        seat_id = get_value[1];
-                        // secected_seat
-                        get_value = after_map_url_value[3].split("=");
-                        GlobalVar secectedSeat = (GlobalVar) getActivity().getApplication();
-                        secectedSeat.setSelected_seat(get_value[1]);
-
-                        getDatas();
-                    }
-                    else{
-                        Log.e("Error", "fail to reserve");
-                    }
-
-
-                }
-
-            }
-        }.start();
 
 
         return view;
@@ -167,8 +114,69 @@ public class MapFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(!((MainActivity)getActivity()).is_reserve){
+            //페이지가 바뀐 후 링크 받아오기
+            new CountDownTimer(20000,2000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+
+                }
+                @Override
+                public void onFinish() {
+                    // counttime.setText("Finished");
+                    Log.d("WebView", "After" + webview.getUrl());
+                    //받아온 url
+                    map_url_value=webview.getUrl();
+
+                    //받은 url 필요 값 추출하기
+                    if(map_url_value!=null){
+                        //url 분리
+                        after_map_url_value=map_url_value.split("&");
+                        for(int i=0;i<after_map_url_value.length;i++) {
+                            //System.out.println(after_map_url_value[i]);
+                            Log.d("WebView", "!!url" + after_map_url_value[i]);
+                        }
+                        String[] get_value;
+                        // success
+                        get_value = after_map_url_value[0].split("=");
+                        is_success = get_value[1].equals("success");
+                        if(is_success){
+                            // map_id
+                            get_value = after_map_url_value[1].split("=");
+                            GlobalVar mapId = (GlobalVar) getActivity().getApplication();
+                            mapId.setMap_id(get_value[1]);
+                            // seat_id
+                            get_value = after_map_url_value[2].split("=");
+                            GlobalVar seatId = (GlobalVar) getActivity().getApplication();
+                            seatId.setSeat_id(get_value[1]);
+                            seat_id = get_value[1];
+                            // secected_seat
+                            get_value = after_map_url_value[3].split("=");
+                            GlobalVar secectedSeat = (GlobalVar) getActivity().getApplication();
+                            secectedSeat.setSelected_seat(get_value[1]);
+                            getDatas();
+
+                        }
+                        else{
+
+                            Log.e("Error", "fail to reserve");
+                        }
+
+                    }
+
+                }
+            }.start();
+        }
+
+
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
     }
 
@@ -204,17 +212,15 @@ public class MapFragment extends Fragment {
                             ((MainActivity)getActivity()).is_reserve = true;
                             ((MainActivity)getActivity()).viewPager.setCurrentItem(1);
                             Log.d("sssssss", "success to change");
-
                         }
                         else{
+                           
                             Log.d("Error", "Error getting documents: ", task.getException());
-
                         }
                     }
                 });
-
-
     }
+
 
 
 }

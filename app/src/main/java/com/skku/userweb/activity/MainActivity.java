@@ -36,7 +36,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.skku.userweb.R;
 import com.skku.userweb.adapter.MainFragmentAdapter;
-import com.skku.userweb.fragment.MapFragment;
 import com.skku.userweb.util.GlobalVar;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Temp";
     public static String idToken;
-    public boolean is_reserve;
+    public boolean is_reserve = false;
     String store_Name;
 
 
@@ -82,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
+
+
+
         fragmentAdapter = new MainFragmentAdapter(this);
         viewPager.setAdapter(fragmentAdapter);
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -94,13 +96,13 @@ public class MainActivity extends AppCompatActivity {
                             Drawable draw;
                             // TODO Auto-generated method stub
                             if (source.equals("icon_drag")) {
-                                if (position == 0) {
+                                if(position==0){
                                     draw = getResources().getDrawable(R.drawable.seat_icon);
-                                } else if (position == 1) {
+                                }else if(position==1){
                                     draw = getResources().getDrawable(R.drawable.timer_icon);
-                                } else if (position == 2) {
+                                }else if(position==2){
                                     draw = getResources().getDrawable(R.drawable.suggestion_icon);
-                                } else {
+                                }else{
                                     draw = getResources().getDrawable(R.drawable.store_icon);
                                 }
                                 draw.setBounds(0, 0, 100, 100);
@@ -114,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).attach();
 
- }
-
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,5 +140,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 
 }
