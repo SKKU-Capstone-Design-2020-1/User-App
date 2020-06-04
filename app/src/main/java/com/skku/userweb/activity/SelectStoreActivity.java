@@ -72,6 +72,8 @@ public class SelectStoreActivity extends AppCompatActivity {
                 Store item = adapter.getItem(position);
                 GlobalVar storeId = (GlobalVar) getApplication();
                 storeId.setStoreId(item.getStoreId());
+                GlobalVar ownerEmail = (GlobalVar) getApplication();
+                ownerEmail.setOwnerEmail(item.getOwnerEmail());
                 GlobalVar storeName = (GlobalVar) getApplication();
                 storeName.setStoreName(item.getStoreName());
                 GlobalVar totalSeat = (GlobalVar) getApplication();
@@ -96,7 +98,7 @@ public class SelectStoreActivity extends AppCompatActivity {
                     }
                 }
                 for(int i =0;i<=count;i++){
-                    adapter.addItem(new Store(arr[i][0],arr[i][1],arr[i][2],arr[i][3],arr[i][4]));
+                    adapter.addItem(new Store(arr[i][0],arr[i][1],arr[i][2],arr[i][3],arr[i][4],arr[i][6]));
                     recyclerView.setAdapter(adapter);
                 }
                 pd.dismiss();
@@ -116,10 +118,10 @@ public class SelectStoreActivity extends AppCompatActivity {
                         Double latitude= (Double) document.getData().get("latitude");
                         Double longtitude= (Double) document.getData().get("longtitude");
                         String storeName= (String) document.getData().get("name");
+                        String ownerEmail= (String) document.getData().get("owner_email");
                         Long num_users= (Long) document.getData().get("num_users");
                         Long num_seats= (Long) document.getData().get("num_seats");
                         String remained = num_users+"/"+num_seats;
-
                         final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                         if ( Build.VERSION.SDK_INT >= 23 &&
                                 ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
@@ -130,7 +132,7 @@ public class SelectStoreActivity extends AppCompatActivity {
                         double userlatitude = location.getLatitude();
                         double res=sqrt((userlongitude-longtitude)*(userlongitude-longtitude)-(userlatitude-latitude)*(userlatitude-latitude));
                         count++;
-                        arr[count]= new String[]{imgurl, storeName, address, remained, storeid, Double.toString(res)};
+                        arr[count]= new String[]{imgurl, storeName, address, remained, storeid, Double.toString(res),ownerEmail};
                     }
                 }
             }

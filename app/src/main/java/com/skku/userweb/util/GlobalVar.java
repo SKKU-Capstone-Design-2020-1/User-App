@@ -15,8 +15,15 @@ public class GlobalVar extends Application {
     private String selected_seat;
     private String seatGroupId;
     private String beaconId;
+    private String ownerEmail;
     public String getImgUrl(){
         return imgUrl;
+    }
+    public void setOwnerEmail(String ownerEmail){
+        this.ownerEmail = ownerEmail;
+    }
+    public String getOwnerEmail(){
+        return ownerEmail;
     }
     public void setImgUrl(String imgUrl){
         this.imgUrl = imgUrl;

@@ -57,6 +57,7 @@ public class UserFragment extends Fragment {
     private TextView email_text;
     private String store_id;
     private String store_Name;
+    private String owner_email;
     private String remained_seat;
     private String img_url;
     private ImageView imgView;
@@ -80,6 +81,8 @@ public class UserFragment extends Fragment {
         store_id = storeId.getStoreId();
         GlobalVar storeName = (GlobalVar) getActivity().getApplication();
         store_Name = storeName.getStoreName();
+        GlobalVar ownerEmail = (GlobalVar) getActivity().getApplication();
+        owner_email = ownerEmail.getOwnerEmail();
 
         GlobalVar imgUrl = (GlobalVar) getActivity().getApplication();
         img_url = imgUrl.getImgUrl();
@@ -133,28 +136,8 @@ public class UserFragment extends Fragment {
                 }
             }
         });
+        email_text.setText(owner_email);
 
-        FirebaseUser userr = FirebaseAuth.getInstance().getCurrentUser();
-        if (userr != null) {
-            // Name, email address, and profile photo Url
-            String email = userr.getEmail();
-            String uid = userr.getUid();
-            email_text.setText(email);
-            Log.d("testttt", "email="+email+"     uid="+uid);
-        }
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if (user != null) {
-//            for (UserInfo profile : user.getProviderData()) {
-//                // Id of the provider (ex: google.com)
-//                String providerId = profile.getProviderId();
-//                // UID specific to the provider
-//                String uid = profile.getUid();
-//                // Name, email address, and profile photo Url
-//                String name = profile.getDisplayName();
-//                String email = profile.getEmail();
-//                Log.d("testaaaaaa", "providerId = "+providerId+"  uid = "+uid+"    name = "+name+"   email"+email);
-//            }
-//        }
 
 
         return rootView;
