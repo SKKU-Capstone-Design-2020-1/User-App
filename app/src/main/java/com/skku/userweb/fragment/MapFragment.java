@@ -106,68 +106,72 @@ public class MapFragment extends Fragment {
         //Log.d("WebView", "Before" + webview.getUrl());
         webview.loadUrl( "javascript:window.location.reload( true )" );
 
-        //페이지가 바뀐 후 링크 받아오기
-        new CountDownTimer(20000,2000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
 
-            }
-            @Override
-            public void onFinish() {
-                // counttime.setText("Finished");
-                Log.d("WebView", "After" + webview.getUrl());
-                //받아온 url
-                map_url_value=webview.getUrl();
-
-                //받은 url 필요 값 추출하기
-                if(map_url_value!=null){
-                    //url 분리
-                    after_map_url_value=map_url_value.split("&");
-                    for(int i=0;i<after_map_url_value.length;i++) {
-                        //System.out.println(after_map_url_value[i]);
-                        Log.d("WebView", "!!url" + after_map_url_value[i]);
-                    }
-                    String[] get_value;
-                    // success
-                    get_value = after_map_url_value[0].split("=");
-                    is_success = get_value[1].equals("success");
-                    if(is_success){
-                        // map_id
-                        get_value = after_map_url_value[1].split("=");
-                        GlobalVar mapId = (GlobalVar) getActivity().getApplication();
-                        mapId.setMap_id(get_value[1]);
-                        // seat_id
-                        get_value = after_map_url_value[2].split("=");
-                        GlobalVar seatId = (GlobalVar) getActivity().getApplication();
-                        seatId.setSeat_id(get_value[1]);
-                        seat_id = get_value[1];
-                        // secected_seat
-                        get_value = after_map_url_value[3].split("=");
-                        GlobalVar secectedSeat = (GlobalVar) getActivity().getApplication();
-                        secectedSeat.setSelected_seat(get_value[1]);
-
-
-                        getDatas();
-
-
-
-                    }
-                    else{
-                      
-                        Log.e("Error", "fail to reserve");
-                    }
-
-                }
-
-            }
-        }.start();
 
 
         return view;
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!((MainActivity)getActivity()).is_reserve){
+            //페이지가 바뀐 후 링크 받아오기
+            new CountDownTimer(20000,2000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
 
+                }
+                @Override
+                public void onFinish() {
+                    // counttime.setText("Finished");
+                    Log.d("WebView", "After" + webview.getUrl());
+                    //받아온 url
+                    map_url_value=webview.getUrl();
+
+                    //받은 url 필요 값 추출하기
+                    if(map_url_value!=null){
+                        //url 분리
+                        after_map_url_value=map_url_value.split("&");
+                        for(int i=0;i<after_map_url_value.length;i++) {
+                            //System.out.println(after_map_url_value[i]);
+                            Log.d("WebView", "!!url" + after_map_url_value[i]);
+                        }
+                        String[] get_value;
+                        // success
+                        get_value = after_map_url_value[0].split("=");
+                        is_success = get_value[1].equals("success");
+                        if(is_success){
+                            // map_id
+                            get_value = after_map_url_value[1].split("=");
+                            GlobalVar mapId = (GlobalVar) getActivity().getApplication();
+                            mapId.setMap_id(get_value[1]);
+                            // seat_id
+                            get_value = after_map_url_value[2].split("=");
+                            GlobalVar seatId = (GlobalVar) getActivity().getApplication();
+                            seatId.setSeat_id(get_value[1]);
+                            seat_id = get_value[1];
+                            // secected_seat
+                            get_value = after_map_url_value[3].split("=");
+                            GlobalVar secectedSeat = (GlobalVar) getActivity().getApplication();
+                            secectedSeat.setSelected_seat(get_value[1]);
+                            getDatas();
+
+                        }
+                        else{
+
+                            Log.e("Error", "fail to reserve");
+                        }
+
+                    }
+
+                }
+            }.start();
+        }
+
+
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

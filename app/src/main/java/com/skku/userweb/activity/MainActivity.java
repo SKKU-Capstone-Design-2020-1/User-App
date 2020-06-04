@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "Temp";
     public static String idToken;
-    public boolean is_reserve;
+    public boolean is_reserve = false;
     String store_Name;
 
 

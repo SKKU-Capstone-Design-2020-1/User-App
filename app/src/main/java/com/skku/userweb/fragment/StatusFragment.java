@@ -60,7 +60,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//public class StatusFragment extends Fragment implements BeaconConsumer {
 public class StatusFragment extends Fragment{
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -79,14 +78,9 @@ public class StatusFragment extends Fragment{
 
     private int gotime = 15;
     private int breaktime = 5;
-    // todo: store 정보, seat정보, seatid 정보 받아오는거 가능해지면 그걸로 초기화하기기
-//    private String Store_key = "6j46BJioYNQS0TEYCRoY";
-//    private String SeatGroup_key = "6A4g4AMrWfey8duKQeGp";
-//    private String Selected_seat = "3";
     private String Store_key;
     private String SeatGroup_key;
     private String Selected_seat;
-    // todo: beaconnumber를 map fragment에서 미리 만들어오기
     private String beaconnumber;
 
     private static final String BeaconsEverywhere = "BeaconsEverywhere";
@@ -104,9 +98,11 @@ public class StatusFragment extends Fragment{
         super.onCreate(savedInstanceState);
         GlobalVar storeId = (GlobalVar) getActivity().getApplication();
         Store_key = storeId.getStoreId();
+        GlobalVar goTime = (GlobalVar) getActivity().getApplication();
+        gotime = goTime.getGotime();
+        GlobalVar breakTime = (GlobalVar) getActivity().getApplication();
+        breaktime = breakTime.getBreaktime();
 
-
-        getFirebaseData();
 
         /*Beacon permission*/
         if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -133,28 +129,8 @@ public class StatusFragment extends Fragment{
         ab_time = (TextView) rootView.findViewById(R.id.fragment_status_absenttime_textView);
         seatnum = (TextView) rootView.findViewById(R.id.fragment_status_seatNum_textView);
         absentLayout = (ConstraintLayout) rootView.findViewById(R.id.fragment_status_absent_constraintlayout);
-        
-//        Button stepSwitchButton = (Button) rootView.findViewById(R.id.fragment_status_stepSwitch_button);
         returnButton = (Button) rootView.findViewById(R.id.fragment_status_return_button);
 
-//        stepSwitchButton.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                if(stateProgressBar.getCurrentStateNumber() == 1){
-//
-//                    bindBeaconConsumer();
-//                    myCountDownTimer = new MyCountDownTimer(gotime*1000, 1000);
-//                    myCountDownTimer.start();
-//                    seatnum.setText("Seat Number: "+ Selected_seat);
-//                    seatnum.setVisibility(View.VISIBLE);
-//                    returnButton.setVisibility(View.VISIBLE);
-//                    stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-//                    changeSeatStatus(0,1);
-//                    Log.i("status change", " 0 -> 1 (by temporal button)");
-//                }
-//
-//            }
-//        });
 
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,19 +163,10 @@ public class StatusFragment extends Fragment{
     }
 
     @Override
-    public void onDestroy() {
-
-//        beaconManager.unbind(beaconConsumer);
-        super.onDestroy();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         if(stateProgressBar.getCurrentStateNumber() == 1){
             if(((MainActivity)getActivity()).is_reserve){
-//                private String SeatGroup_key;
-//                private String SeatId;
                 GlobalVar BeaconNumber = (GlobalVar) getActivity().getApplication();
                 beaconnumber = BeaconNumber.getBeaconId();
                 GlobalVar SelectedSeat = (GlobalVar) getActivity().getApplication();
@@ -215,9 +182,6 @@ public class StatusFragment extends Fragment{
                 seatnum.setVisibility(View.VISIBLE);
                 returnButton.setVisibility(View.VISIBLE);
                 stateProgressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO);
-//                changeSeatStatus(0,1);
-//                Log.i("status change", " 0 -> 1 (by temporal button)");
-//                aaa.setText("success");
             }
         }
     }
@@ -269,7 +233,6 @@ public class StatusFragment extends Fragment{
         @Override
         public void onFinish() {
             if(stateProgressBar.getCurrentStateNumber() == 2){
-                // todo: map화면으로 전환
                 returnSeat(1);
                 Log.i("Return Seat","return seat by go timeer");
             }
@@ -326,62 +289,15 @@ public class StatusFragment extends Fragment{
 
         @Override
         public void onFinish() {
-            // 유저상태 예약전으로 하고 map화면으로 전환
             absentLayout.setVisibility(View.INVISIBLE);
             isAbsent = false;
             absentCountDownTimer.cancel();
 
-            // map화면으로 전환
             returnSeat(2);
             Log.i("Return Seat","return seat by absent timer");
-
         }
     }
-    private void getFirebaseData(){
 
-        Log.d("status", "getfirebase data start");
-
-
-        // go time, break time
-        db.collection("stores")
-                .document(Store_key)
-                .get()
-                .addOnCompleteListener(task -> {
-            if(task.isSuccessful()){
-                DocumentSnapshot document = task.getResult();
-                Object go = document.getData().get("go_time");
-
-                Log.d("status", "go_time: " + go);
-                gotime = Integer.parseInt(go.toString());
-
-                Object bre = document.getData().get("break_time");
-                Log.d("status", "break_time: " + bre);
-                breaktime = Integer.parseInt(bre.toString());
-
-            }
-        });
-
-        // beacon id
-//        db.collection("stores")
-//                .document(Store_key)
-//                .collection("seatGroups")
-//                .document(SeatGroup_key)
-//                .get().addOnCompleteListener(task -> {
-//            if(task.isSuccessful()){
-//                DocumentSnapshot document = task.getResult();
-//                ArrayList<String> beaconlist = (ArrayList<String>) document.getData().get("beacon_ids");
-//                Log.d("status", "beacon ids: " + beaconlist);
-////                beaconnnn.add("sssssssssss");
-//                Log.d("status", "beacon id 0: " + beaconlist.get(0));
-//                beaconnumber = beaconlist.get(0).toString();
-//                Log.d("status", "beacon number: " + beaconnumber);
-//
-//            }
-//        });
-
-//        Log.d("beaconid", beaconnumber);
-
-    }
     private void usingSeat(){
         myCountDownTimer.cancel();
 
@@ -419,7 +335,6 @@ public class StatusFragment extends Fragment{
 
     private void changeSeatStatus(int preStatus, int newStatus){
 
-        // DocumentReference docRef = db.collection("stores/6j46BJioYNQS0TEYCRoY/seatGroups").document("6A4g4AMrWfey8duKQeGp");
         DocumentReference docRef = db.collection("stores")
                 .document(Store_key)
                 .collection("seatGroups")
@@ -455,8 +370,8 @@ public class StatusFragment extends Fragment{
         beaconManager = BeaconManager.getInstanceForApplication(getActivity());
         beaconManager.getBeaconParsers().add(new BeaconParser()
                 .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-        //이건 알트비콘의 layout 입니다
-//            //2-3/4-19이런 것들은 다 byte position 을 의미합니다
+        //This is layout of AltBeacon
+        //2-3/4-19 means byte position
 
         beaconConsumer = new BeaconConsumer() {
             @Override
@@ -470,9 +385,9 @@ public class StatusFragment extends Fragment{
                             Log.i(BeaconsEverywhere, "I just saw an beacon for the first time! Id1->"+region.getId1()
                                     +" id 2:"+region.getId2()+" id 3:"+region.getId3());
 
-                            //첫번째 아이디는 UUID
-                            //두번째 아이디는 major
-                            //세번째 아이디는 minor
+                            //id 1: UUID
+                            //id 2: major
+                            //id 3: minor
 
                             beaconManager.startRangingBeaconsInRegion(region);
                         } catch(RemoteException e){
