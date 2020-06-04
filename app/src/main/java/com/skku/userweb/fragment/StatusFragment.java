@@ -410,6 +410,11 @@ public class StatusFragment extends Fragment{
 
         changeSeatStatus(previous_Status,0);
         ((MainActivity)getActivity()).is_reserve = false;
+
+        //예약 실패시 map 다시 로드
+        MapFragment.webview.loadUrl(MapFragment.Url);
+
+
         beaconManager.unbind(beaconConsumer);
     }
 

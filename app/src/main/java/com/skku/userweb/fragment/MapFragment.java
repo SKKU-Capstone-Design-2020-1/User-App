@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -43,34 +44,38 @@ import static com.skku.userweb.activity.MainActivity.idToken;
 public class MapFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String map_url_value;
+    public static  String map_url_value;
+    private String map_url;
     private String[] after_map_url_value;
-    private String store_id;
     private String seat_id;
     private Long num_users;
     private Long num_seats;
-
-    private View view;
-    private WebView webview;
     private boolean is_success = false;
+
+    public static View view;
+    public static String Url;
+    public static WebView webview;
+    public  static String store_id;
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GlobalVar storeId = (GlobalVar) getActivity().getApplication();
         store_id = storeId.getStoreId();
+
     }
 
-    //private String token;
-
     public MapFragment() {
+
+
     }
 
     @SuppressLint("WrongViewCast")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
 
 
         view=inflater.inflate(R.layout.fragment_map,container,false);
@@ -87,11 +92,9 @@ public class MapFragment extends Fragment {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
                             idToken = task.getResult().getToken();
+                            Url= "https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken;
+                           webview.loadUrl(Url);
 
-                           webview.loadUrl("https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken);
-//                            sendRegistrationToServer(idToken);
-                            // Send token to your backend via HTTPS
-                            // ...
                         } else {
                             task.getException();
                         }
@@ -101,18 +104,19 @@ public class MapFragment extends Fragment {
 
 
 
-       webview.loadUrl( "javascript:window.location.reload( true )" );
+
+       //webview.loadUrl( "javascript:window.location.reload( true )" );
 
         //페이지가 바뀐 후 링크 받아오기
-        new CountDownTimer(10000,2000) {
+
+        new CountDownTimer(20000,2000) {
             @Override
             public void onTick(long millisUntilFinished) {
 
             }
             @Override
             public void onFinish() {
-                // counttime.setText("Finished");
-                Log.d("WebView", "After" + webview.getUrl());
+
                 //받아온 url
                 map_url_value=webview.getUrl();
 
@@ -148,12 +152,10 @@ public class MapFragment extends Fragment {
                         getDatas();
                     }
                     else{
-
-                        webview.loadUrl("https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken);
-                        //Log.d("WebView", "!!g" + webview.getUrl());
-
                         Log.e("Error", "fail to reserve");
                     }
+
+
                 }
 
             }
@@ -167,7 +169,6 @@ public class MapFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
     }
 
@@ -203,21 +204,17 @@ public class MapFragment extends Fragment {
                             ((MainActivity)getActivity()).is_reserve = true;
                             ((MainActivity)getActivity()).viewPager.setCurrentItem(1);
                             Log.d("sssssss", "success to change");
+
                         }
                         else{
-
-
-                            webview.loadUrl("https://reserveseats.site/reserve?sid="+store_id+"&user_token="+ idToken);
                             Log.d("Error", "Error getting documents: ", task.getException());
+
                         }
                     }
-
-
                 });
 
 
     }
-
 
 
 }

@@ -36,6 +36,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.skku.userweb.R;
 import com.skku.userweb.adapter.MainFragmentAdapter;
+import com.skku.userweb.fragment.MapFragment;
 import com.skku.userweb.util.GlobalVar;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
@@ -81,9 +82,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
-
-
-
         fragmentAdapter = new MainFragmentAdapter(this);
         viewPager.setAdapter(fragmentAdapter);
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -96,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
                             Drawable draw;
                             // TODO Auto-generated method stub
                             if (source.equals("icon_drag")) {
-                                if(position==0){
+                                if (position == 0) {
                                     draw = getResources().getDrawable(R.drawable.seat_icon);
-                                }else if(position==1){
+                                } else if (position == 1) {
                                     draw = getResources().getDrawable(R.drawable.timer_icon);
-                                }else if(position==2){
+                                } else if (position == 2) {
                                     draw = getResources().getDrawable(R.drawable.suggestion_icon);
-                                }else{
+                                } else {
                                     draw = getResources().getDrawable(R.drawable.store_icon);
                                 }
                                 draw.setBounds(0, 0, 100, 100);
@@ -116,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }).attach();
 
-    }
+ }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -140,35 +139,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-/*
-    private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
-
-        // OKHTTP를 이용해 웹서버로 토큰값을 날려줌
-
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = new FormEncodingBuilder()
-                .add("Token", token)
-                .build();
-
-        Log.d("WebView", "!!body" + body);
-        //request
-        Request request = new Request.Builder()
-                .url("https://reserveseats.site/reserve?sid=6j46BJioYNQS0TEYCRoY&user_token="+token)
-                .post(body)
-                .build();
-
-        try {
-            Response response = client.newCall(request).execute();
-            String responseString = response.body().string();
-            response.body().close();
-            // do whatever you need to do with responseString
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-*/
 
 }
