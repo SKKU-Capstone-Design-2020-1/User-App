@@ -141,34 +141,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
-
-        // OKHTTP를 이용해 웹서버로 토큰값을 날려줌
-
-        OkHttpClient client = new OkHttpClient();
-        RequestBody body = new FormEncodingBuilder()
-                .add("Token", token)
-                .build();
-
-        Log.d("WebView", "!!body" + body);
-        //request
-        Request request = new Request.Builder()
-                .url("https://reserveseats.site/reserve?sid=6j46BJioYNQS0TEYCRoY&user_token="+token)
-                .post(body)
-                .build();
-
-        try {
-            Response response = client.newCall(request).execute();
-            String responseString = response.body().string();
-            response.body().close();
-            // do whatever you need to do with responseString
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
 
 }
