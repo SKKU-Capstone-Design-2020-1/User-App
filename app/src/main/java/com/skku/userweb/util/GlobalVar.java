@@ -16,6 +16,8 @@ public class GlobalVar extends Application {
     private String seatGroupId;
     private String beaconId;
     private String ownerEmail;
+    private int gotime;
+    private int breaktime;
     public String getImgUrl(){
         return imgUrl;
     }
@@ -82,6 +84,18 @@ public class GlobalVar extends Application {
     }
     public void setBeaconId(String beaconId){
         this.beaconId = beaconId;
+    }
+    public int getGotime(){
+        return gotime;
+    }
+    public void setGotime(int gotime){
+        this.gotime = gotime;
+    }
+    public int getBreaktime(){
+        return breaktime;
+    }
+    public void setBreaktime(int breaktime){
+        this.breaktime = breaktime;
     }
 
 }

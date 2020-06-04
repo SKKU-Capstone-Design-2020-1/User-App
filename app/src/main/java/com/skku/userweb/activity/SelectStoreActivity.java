@@ -79,6 +79,10 @@ public class SelectStoreActivity extends AppCompatActivity {
                 totalSeat.setTotalSeat(item.getRemainedSeat());
                 GlobalVar imgUrl = (GlobalVar) getApplication();
                 imgUrl.setImgUrl(item.getStoreImage());
+                GlobalVar goTime = (GlobalVar) getApplication();
+                goTime.setGotime(item.getGotime());
+                GlobalVar breakTime = (GlobalVar) getApplication();
+                breakTime.setBreaktime(item.getBreaktime());
                 Intent intent = new Intent(SelectStoreActivity.this,MainActivity.class);
                 startActivity(intent);
             }
@@ -102,7 +106,7 @@ public class SelectStoreActivity extends AppCompatActivity {
                     }
                 }
                 for(int i =0;i<=count;i++){
-                    adapter.addItem(new Store(arr[i][0],arr[i][1],arr[i][2],arr[i][3],arr[i][4],arr[i][6]));
+                    adapter.addItem(new Store(arr[i][0],arr[i][1],arr[i][2],arr[i][3],arr[i][4],arr[i][6],arr[i][7],arr[i][8]));
                     Log.d("test res", arr[i][5]);
                     recyclerView.setAdapter(adapter);
                 }
@@ -124,6 +128,8 @@ public class SelectStoreActivity extends AppCompatActivity {
                         Double longtitude= (Double) document.getData().get("longtitude");
                         String storeName= (String) document.getData().get("name");
                         String ownerEmail= (String) document.getData().get("owner_email");
+                        Long goTime = (Long) document.getData().get("go_time");
+                        Long breakTime = (Long) document.getData().get("break_time");
                         Long num_users= (Long) document.getData().get("num_users");
                         Long num_seats= (Long) document.getData().get("num_seats");
                         String remained = num_users+"/"+num_seats;
@@ -137,7 +143,7 @@ public class SelectStoreActivity extends AppCompatActivity {
                         double userlatitude = location.getLatitude();
                         double res=sqrt((userlongitude-longtitude)*(userlongitude-longtitude)-(userlatitude-latitude)*(userlatitude-latitude));
                         count++;
-                        arr[count]= new String[]{imgurl, storeName, address, remained, storeid, Double.toString(res),ownerEmail};
+                        arr[count]= new String[]{imgurl, storeName, address, remained, storeid, Double.toString(res),ownerEmail, goTime.toString(), breakTime.toString()};
 
                     }
                 }
