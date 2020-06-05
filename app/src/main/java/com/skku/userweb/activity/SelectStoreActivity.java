@@ -51,13 +51,14 @@ public class SelectStoreActivity extends AppCompatActivity {
     static private String temp;
     private Integer count;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
+    private ProgressDialog pd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_store);
         recyclerView = findViewById(R.id.recyclerView);
-        ProgressDialog pd = ProgressDialog.show(SelectStoreActivity.this, "로딩중", "Page Loading...");
+        pd = ProgressDialog.show(SelectStoreActivity.this, "로딩중", "Page Loading...");
+
         arr = new String[100][7];
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
@@ -88,31 +89,7 @@ public class SelectStoreActivity extends AppCompatActivity {
             }
         });
         getData();
-        Handler mHandler = new Handler();
-        mHandler.postDelayed(new Runnable()  {
-            public void run() {
-                for (int j=0;j<=count;j++){
-                    Log.d("test", arr[j][0]+"\\"+arr[j][1]+"\\"+arr[j][2]+"\\"+arr[j][3]+"\\"+arr[j][4]+"\\"+arr[j][5]+"\\"+arr[j][6]);
-                }
-                for (int j =0;j<count;j++){
-                    for (int k =j+1;k<=count;k++){
-                        if(Double.parseDouble(arr[j][5])>Double.parseDouble(arr[k][5])){
-                            for(int n=0;n<7;n++){
-                                temp=arr[j][n];
-                                arr[j][n]=arr[k][n];
-                                arr[k][n]=temp;
-                            }
-                        }
-                    }
-                }
-                for(int i =0;i<=count;i++){
-                    adapter.addItem(new Store(arr[i][0],arr[i][1],arr[i][2],arr[i][3],arr[i][4],arr[i][6],arr[i][7],arr[i][8]));
-                    Log.d("test res", arr[i][5]);
-                    recyclerView.setAdapter(adapter);
-                }
-                pd.dismiss();
-            }
-        }, 3000);
+
     }
     private void getData() {
         //get data from firestore "stores" collection and log the result data
@@ -146,6 +123,27 @@ public class SelectStoreActivity extends AppCompatActivity {
                         arr[count]= new String[]{imgurl, storeName, address, remained, storeid, Double.toString(res),ownerEmail, goTime.toString(), breakTime.toString()};
 
                     }
+
+                    for (int j=0;j<=count;j++){
+                        Log.d("test", arr[j][0]+"\\"+arr[j][1]+"\\"+arr[j][2]+"\\"+arr[j][3]+"\\"+arr[j][4]+"\\"+arr[j][5]+"\\"+arr[j][6]);
+                    }
+                    for (int j =0;j<count;j++){
+                        for (int k =j+1;k<=count;k++){
+                            if(Double.parseDouble(arr[j][5])>Double.parseDouble(arr[k][5])){
+                                for(int n=0;n<7;n++){
+                                    temp=arr[j][n];
+                                    arr[j][n]=arr[k][n];
+                                    arr[k][n]=temp;
+                                }
+                            }
+                        }
+                    }
+                    for(int i =0;i<=count;i++){
+                        adapter.addItem(new Store(arr[i][0],arr[i][1],arr[i][2],arr[i][3],arr[i][4],arr[i][6],arr[i][7],arr[i][8]));
+                        Log.d("test res", arr[i][5]);
+                        recyclerView.setAdapter(adapter);
+                    }
+                    pd.dismiss();
                 }
             }
         });
