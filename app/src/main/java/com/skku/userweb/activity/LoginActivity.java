@@ -59,6 +59,12 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            Intent intent= new Intent(getApplicationContext(), SelectStoreActivity.class);
+            startActivity(intent);
+        }
     }
 
 
