@@ -3,66 +3,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
+    <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/default_margin"
-        android:layout_marginBottom="@dimen/default_margin"
-        app:cardCornerRadius="@dimen/default_margin"
-        tools:ignore="MissingConstraints">
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/default_padding"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="8dp"
+        >
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/default_margin"
+            android:elevation="5dp"
+            app:cardUseCompatPadding="true"
+            app:cardCornerRadius="@dimen/default_margin"
+            >
 
-        <ImageView
-            android:id="@+id/storeImage"
-            android:layout_width="365dp"
-            android:layout_height="320dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/seoul_skku"/>
-
-        <LinearLayout
-            android:layout_width="298dp"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/storeName"
+            <LinearLayout
+                android:id="@+id/linearLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:padding="@dimen/default_padding"
-                android:text="TextView"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/default_font_large" />
-
-            <TextView
-                android:id="@+id/storeAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/default_padding"
-                android:text="TextView"
-                android:textSize="@dimen/default_font_normal" />
-
-            <TextView
-                android:id="@+id/remainedSeat"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:padding="@dimen/default_padding"
-                android:text="TextView"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/default_font_large" />
-        </LinearLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/storeImage"
+                    android:layout_width="365dp"
+                    android:layout_height="320dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/seoul_skku" />
+
+                <LinearLayout
+                    android:layout_width="298dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/storeName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:padding="@dimen/default_padding"
+                        android:text="TextView"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/default_font_large" />
+
+                    <TextView
+                        android:id="@+id/storeAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/default_padding"
+                        android:text="TextView"
+                        android:textSize="@dimen/default_font_normal" />
+
+                    <TextView
+                        android:id="@+id/remainedSeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="@dimen/default_padding"
+                        android:text="TextView"
+                        android:textColor="@android:color/black"
+                        android:textSize="@dimen/default_font_large" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
