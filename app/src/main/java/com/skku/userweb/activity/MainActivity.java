@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentAdapter = new MainFragmentAdapter(this);
         viewPager.setAdapter(fragmentAdapter);
+        viewPager.setUserInputEnabled(false);
         new TabLayoutMediator(tabLayout, viewPager, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
             public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {

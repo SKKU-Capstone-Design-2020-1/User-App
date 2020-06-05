@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
+
 import com.skku.userweb.R;
+
 import android.content.Intent;
 
 public class SplashActivity extends AppCompatActivity {
@@ -13,22 +15,20 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-       /*Handler handler=new Handler();
+        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent=new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
-        },3000);
+        }, 3000);
     }
 
-    protected  void  onPause(){
+    protected void onPause() {
         super.onPause();
         finish();
-    }*/
     }
-
-
 }
+

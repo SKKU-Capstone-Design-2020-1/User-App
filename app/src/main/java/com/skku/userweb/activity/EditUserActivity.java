@@ -86,12 +86,12 @@ public class EditUserActivity extends AppCompatActivity {
                 return;
             }
             if (documentSnapshot.exists()) {
-              //  String username1 = documentSnapshot.getString("username");
-              //  String phone1 = documentSnapshot.getString("phone");
+                String username1 = documentSnapshot.getString("username");
+                String phone1 = documentSnapshot.getString("phone");
                 String email1 = documentSnapshot.getString("email");
                 editTextEmail.setText(email1);
-                //editTextUsername.setText(username1);
-                //editTextPhone.setText(phone1);
+                editTextUsername.setText(username1);
+                editTextPhone.setText(phone1);
             }
         });
 
@@ -124,17 +124,17 @@ public class EditUserActivity extends AppCompatActivity {
        String password = editTextPassword.getText().toString().trim();
        String password_confirm = editTextPasswordConfirm.getText().toString().trim();
 
-       if (username.isEmpty()) {
-           editTextUsername.setError("Name requried");
-           editTextUsername.requestFocus();
-           return;
-       }
-
-       if (phone.isEmpty()) {
-           editTextPhone.setError("Phone requried");
-           editTextPhone.requestFocus();
-           return;
-       }
+//       if (username.isEmpty()) {
+//           editTextUsername.setError("Name requried");
+//           editTextUsername.requestFocus();
+//           return;
+//       }
+//
+//       if (phone.isEmpty()) {
+//           editTextPhone.setError("Phone requried");
+//           editTextPhone.requestFocus();
+//           return;
+//       }
 
        if (password.isEmpty()) {
            editTextPassword.setError("Enter password");

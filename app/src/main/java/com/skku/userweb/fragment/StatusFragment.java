@@ -418,7 +418,7 @@ public class StatusFragment extends Fragment{
                         if(collection.size() > 0){
                             Log.i(BeaconsEverywhere, "The first beacon I see is about " + collection.iterator().next().getDistance() + " meters away.");
                             for(Beacon beacon: collection){
-                                if(beacon.getDistance() < 5.0){
+                                if(beacon.getDistance() < 1.0){
                                     realbeacon = true;
                                 }
                                 else{
