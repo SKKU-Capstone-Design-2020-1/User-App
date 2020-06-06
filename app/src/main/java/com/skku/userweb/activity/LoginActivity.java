@@ -67,27 +67,12 @@ public class LoginActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null){
-            Log.d("Tag", FirebaseAuth.getInstance().getUid());
-            String Uid = FirebaseAuth.getInstance().getUid();
-            DocumentReference docRef = db.collection("users").document(Uid);
+            Log.d("Tag", user.getEmail());
 
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        // Document found in the offline cache
-                        DocumentSnapshot document = task.getResult();
-                        String user_email = (String) document.getData().get("email");
-                        GlobalVar userId = (GlobalVar) getApplication();
-                        userId.setUserId(user_email);
-                        Intent intent= new Intent(getApplicationContext(), SelectStoreActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Log.d("test", "User email get failed: ", task.getException());
-                    }
-                }
-            });
-
+            GlobalVar userId = (GlobalVar) getApplication();
+            userId.setUserId(user.getEmail());
+            Intent intent= new Intent(getApplicationContext(), SelectStoreActivity.class);
+            startActivity(intent);
 
         }
     }
