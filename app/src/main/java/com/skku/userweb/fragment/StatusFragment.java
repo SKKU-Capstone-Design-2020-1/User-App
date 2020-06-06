@@ -75,7 +75,7 @@ public class StatusFragment extends Fragment{
 
     private boolean isAbsent = false;
     private ConstraintLayout absentLayout;
-
+    // default value
     private int gotime = 15;
     private int breaktime = 5;
     private String Store_key;

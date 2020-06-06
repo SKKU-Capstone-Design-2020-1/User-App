@@ -120,6 +120,7 @@ public class MapFragment extends Fragment {
         if(!((MainActivity)getActivity()).is_reserve){
             //페이지가 바뀐 후 링크 받아오기
             mapCountDownTimer = new MapCountDownTimer(2000000, 1000);
+            Log.d("Tag", "timer first start");
             mapCountDownTimer.start();
 
         }
@@ -157,20 +158,18 @@ public class MapFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for(QueryDocumentSnapshot document : task.getResult()){
-                                Log.d("Taaaaaag", document.getId() + " => " + document.getData());
+                                Log.d("Tag", document.getId() + " => " + document.getData());
                                 SeatGroupId.setSeatGroupId(document.getId());
                                 Object go = document.getData().get("go_time");
 
                                 ArrayList<String> beaconlist = (ArrayList<String>) document.getData().get("beacon_ids");
-                                Log.d("Taaaaaag", "beacon ids: " + beaconlist);
-                                Log.d("Taaaaaag", "beacon id 0: " + beaconlist.get(0));
                                 BeaconId.setBeaconId(beaconlist.get(0));
 
                             }
 
                             ((MainActivity)getActivity()).is_reserve = true;
                             ((MainActivity)getActivity()).viewPager.setCurrentItem(1);
-                            Log.d("sssssss", "success to change");
+                            Log.d("Tag", "success to change");
                         }
                         else{
                            
@@ -222,48 +221,14 @@ public class MapFragment extends Fragment {
                     mapCountDownTimer.cancel();
 
                 }
-                else{
-                    Log.d("Tag", "fail to reserve");
-                }
 
             }
         }
 
         @Override
         public void onFinish() {
-            if(map_url_value!=null){
-                //url 분리
-                after_map_url_value=map_url_value.split("&");
-                for(int i=0;i<after_map_url_value.length;i++) {
-                    //System.out.println(after_map_url_value[i]);
-                    Log.d("WebView", "!!url" + after_map_url_value[i]);
-                }
-                String[] get_value;
-                // success
-                get_value = after_map_url_value[0].split("=");
-                is_success = get_value[1].equals("success");
-                if(is_success){
-                    // map_id
-                    get_value = after_map_url_value[1].split("=");
-                    GlobalVar mapId = (GlobalVar) getActivity().getApplication();
-                    mapId.setMap_id(get_value[1]);
-                    // seat_id
-                    get_value = after_map_url_value[2].split("=");
-                    GlobalVar seatId = (GlobalVar) getActivity().getApplication();
-                    seatId.setSeat_id(get_value[1]);
-                    seat_id = get_value[1];
-                    // secected_seat
-                    get_value = after_map_url_value[3].split("=");
-                    GlobalVar secectedSeat = (GlobalVar) getActivity().getApplication();
-                    secectedSeat.setSelected_seat(get_value[1]);
-                    getDatas();
-
-                }
-                else{
-                    Log.d("Tag", "fail to reserve");
-                }
-
-            }
+            Log.d("Tag", "timer second start");
+            mapCountDownTimer.start();
         }
     }
 
