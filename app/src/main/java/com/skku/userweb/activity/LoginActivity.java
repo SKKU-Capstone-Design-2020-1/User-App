@@ -24,15 +24,20 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.skku.userweb.R;
 import com.skku.userweb.fragment.ContactFragment;
 import com.skku.userweb.util.GlobalVar;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "LoginActivity";
     private EditText editTextEmail, editTextPassword;
     private Bundle bundle;
@@ -62,8 +67,28 @@ public class LoginActivity extends AppCompatActivity {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null){
-            Intent intent= new Intent(getApplicationContext(), SelectStoreActivity.class);
-            startActivity(intent);
+            Log.d("Tag", FirebaseAuth.getInstance().getUid());
+            String Uid = FirebaseAuth.getInstance().getUid();
+            DocumentReference docRef = db.collection("users").document(Uid);
+
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        // Document found in the offline cache
+                        DocumentSnapshot document = task.getResult();
+                        String user_email = (String) document.getData().get("email");
+                        GlobalVar userId = (GlobalVar) getApplication();
+                        userId.setUserId(user_email);
+                        Intent intent= new Intent(getApplicationContext(), SelectStoreActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Log.d("test", "User email get failed: ", task.getException());
+                    }
+                }
+            });
+
+
         }
     }
 
